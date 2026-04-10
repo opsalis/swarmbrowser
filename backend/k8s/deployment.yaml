@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swarmbrowser
+  namespace: swarmbrowser
+  labels:
+    app: swarmbrowser
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: swarmbrowser
+  template:
+    metadata:
+      labels:
+        app: swarmbrowser
+    spec:
+      containers:
+      - name: browser
+        image: opsalis/swarmbrowser:latest
+        ports:
+        - containerPort: 3500
+          name: http
+        env:
+        - name: PORT
+          value: "3500"
+        - name: POOL_SIZE
+          value: "5"
+        - name: PAGE_TIMEOUT
+          value: "30000"
+        - name: NODE_LOCATION
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: swarmbrowser-secrets
+              key: api-key
+              optional: true
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 2000m
+            memory: 2Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3500
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3500
+          initialDelaySeconds: 10
+          periodSeconds: 10
+      # Use shared memory for Chrome
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 512Mi
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+---
+# Spread pods across nodes for geographic distribution
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: swarmbrowser-priority
+value: 100
+globalDefault: false
+description: "Priority for SwarmBrowser pods"

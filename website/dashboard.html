@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — SwarmBrowser</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #fff; --fg: #111827; --muted: #6b7280; --accent: #059669; --border: #e5e7eb; --card-bg: #f9fafb; --green: #10b981; --radius: 12px; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; }
+    a { color: var(--accent); }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); margin-bottom: 2rem; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; }
+    .stat-card .value { font-size: 2rem; font-weight: 800; color: var(--accent); }
+    .stat-card .label { font-size: 0.85rem; color: var(--muted); margin-top: 0.25rem; }
+
+    .try-it { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; margin-bottom: 2rem; }
+    .try-it h2 { font-size: 1.3rem; margin-bottom: 1rem; }
+    .try-it input { width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; }
+    .try-it input:focus { outline: none; border-color: var(--accent); }
+    .try-it button { padding: 0.75rem 2rem; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .result-area { margin-top: 1.5rem; }
+    .result-area img { max-width: 100%; border: 1px solid var(--border); border-radius: 8px; }
+    .result-area pre { background: #1f2937; color: #e5e7eb; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; }
+
+    footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>SwarmBrowser Dashboard</h1>
+  <p class="subtitle">Try the API and monitor your usage</p>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="value" id="s-pool">-</div><div class="label">Pool Status</div></div>
+    <div class="stat-card"><div class="value" id="s-idle">-</div><div class="label">Idle Browsers</div></div>
+    <div class="stat-card"><div class="value" id="s-busy">-</div><div class="label">Busy Browsers</div></div>
+    <div class="stat-card"><div class="value" id="s-location">-</div><div class="label">Location</div></div>
+  </div>
+
+  <div class="try-it">
+    <h2>Try It — Take a Screenshot</h2>
+    <input type="url" id="url-input" placeholder="https://example.com" value="https://example.com" />
+    <button onclick="takeScreenshot()">Take Screenshot</button>
+    <div class="result-area" id="result"></div>
+  </div>
+</div>
+
+<footer>
+  <p>Powered by <a href="index.html">SwarmBrowser</a></p>
+</footer>
+
+<script>
+  const API_BASE = localStorage.getItem('swarmbrowser_api') || '';
+  const API_KEY = localStorage.getItem('swarmbrowser_key') || '';
+
+  async function fetchHealth() {
+    if (!API_BASE) return;
+    try {
+      const res = await fetch(`${API_BASE}/health`);
+      const data = await res.json();
+      document.getElementById('s-pool').textContent = data.pool ? data.pool.total : '-';
+      document.getElementById('s-idle').textContent = data.pool ? data.pool.idle : '-';
+      document.getElementById('s-busy').textContent = data.pool ? data.pool.busy : '-';
+      document.getElementById('s-location').textContent = data.location || '-';
+    } catch (err) { console.error(err); }
+  }
+
+  async function takeScreenshot() {
+    if (!API_BASE) {
+      document.getElementById('result').innerHTML = '<pre>Set localStorage "swarmbrowser_api" to your API URL first</pre>';
+      return;
+    }
+    const url = document.getElementById('url-input').value;
+    document.getElementById('result').innerHTML = '<p>Rendering...</p>';
+    try {
+      const res = await fetch(`${API_BASE}/v1/screenshot`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-API-Key': API_KEY },
+        body: JSON.stringify({ url, width: 1280, height: 720 })
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        document.getElementById('result').innerHTML = `<pre>Error: ${err.error}</pre>`;
+        return;
+      }
+      const blob = await res.blob();
+      const imgUrl = URL.createObjectURL(blob);
+      const loadTime = res.headers.get('X-Load-Time');
+      const location = res.headers.get('X-Location');
+      document.getElementById('result').innerHTML = `
+        <p style="margin-bottom:0.5rem; color:var(--muted); font-size:0.85rem;">
+          Rendered from ${location || 'unknown'} in ${loadTime || '?'}ms
+        </p>
+        <img src="${imgUrl}" alt="Screenshot of ${url}" />
+      `;
+    } catch (err) {
+      document.getElementById('result').innerHTML = `<pre>Error: ${err.message}</pre>`;
+    }
+  }
+
+  fetchHealth();
+  setInterval(fetchHealth, 10000);
+</script>
+
+</body>
+</html>

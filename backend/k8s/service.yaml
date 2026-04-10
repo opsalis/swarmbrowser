@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: swarmbrowser
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: swarmbrowser
+  namespace: swarmbrowser
+  labels:
+    app: swarmbrowser
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3500
+    targetPort: 3500
+    protocol: TCP
+    name: http
+  selector:
+    app: swarmbrowser
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: swarmbrowser-ingress
+  namespace: swarmbrowser
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+spec:
+  rules:
+  - host: api.swarmbrowser.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: swarmbrowser
+            port:
+              number: 3500
+  tls:
+  - hosts:
+    - api.swarmbrowser.example.com
+    secretName: swarmbrowser-tls

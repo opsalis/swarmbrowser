@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SwarmBrowser — Headless Browser API from Anywhere</title>
+  <meta name="description" content="Render, screenshot, scrape, and generate PDFs from 4 continents. See how your site looks from Singapore, Frankfurt, Canada, or the UK." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff; --fg: #111827; --muted: #6b7280; --accent: #059669;
+      --accent-light: #d1fae5; --border: #e5e7eb; --card-bg: #f9fafb;
+      --green: #10b981; --red: #ef4444;
+      --radius: 12px; --max-w: 1100px;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav { display: flex; justify-content: space-between; align-items: center; max-width: var(--max-w); margin: 0 auto; padding: 1.5rem 2rem; }
+    nav .logo { font-size: 1.4rem; font-weight: 700; color: var(--fg); }
+    nav .links { display: flex; gap: 2rem; align-items: center; }
+    nav .links a { color: var(--muted); font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.65rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #047857; text-decoration: none; }
+    .btn-outline { border: 2px solid var(--border); color: var(--fg); background: transparent; }
+
+    .hero { text-align: center; padding: 5rem 2rem 4rem; max-width: 800px; margin: 0 auto; }
+    .hero h1 { font-size: 3rem; font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 1.25rem; color: var(--muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    .use-cases { display: flex; justify-content: center; gap: 1rem; padding: 2rem; flex-wrap: wrap; }
+    .use-case-tag { padding: 0.5rem 1.2rem; background: var(--accent-light); color: var(--accent); border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+
+    .features { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
+    .features h2 { text-align: center; font-size: 2rem; margin-bottom: 3rem; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .feature-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
+    .feature-card h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
+    .feature-card p { color: var(--muted); font-size: 0.95rem; }
+
+    .how-it-works { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
+    .how-it-works h2 { text-align: center; font-size: 2rem; margin-bottom: 3rem; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+    .step { text-align: center; padding: 1.5rem; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 1.2rem; margin-bottom: 1rem; }
+    .step h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .step p { color: var(--muted); font-size: 0.9rem; }
+
+    .pricing { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
+    .pricing h2 { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; }
+    .pricing .subtitle { text-align: center; color: var(--muted); margin-bottom: 3rem; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+    .price-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 2.5rem 2rem; text-align: center; }
+    .price-card.featured { border-color: var(--accent); position: relative; }
+    .price-card.featured::before { content: 'Most Popular'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 0.2rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .price-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .price-card .price { font-size: 2.5rem; font-weight: 800; margin: 1rem 0 0.25rem; }
+    .price-card .price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .price-card .price-note { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .price-card ul { list-style: none; text-align: left; margin-bottom: 2rem; }
+    .price-card ul li { padding: 0.4rem 0; font-size: 0.95rem; color: var(--muted); }
+    .price-card ul li::before { content: '\2713'; color: var(--green); font-weight: 700; margin-right: 0.5rem; }
+
+    .api-example { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
+    .api-example h2 { text-align: center; font-size: 2rem; margin-bottom: 2rem; }
+    .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+    .code-tab { padding: 0.5rem 1rem; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 0.9rem; font-weight: 600; background: #e5e7eb; color: var(--muted); border: none; }
+    .code-tab.active { background: #1f2937; color: #e5e7eb; }
+    .code-block { background: #1f2937; color: #e5e7eb; border-radius: 0 var(--radius) var(--radius) var(--radius); padding: 2rem; overflow-x: auto; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.7; }
+    .code-block .comment { color: #6b7280; }
+    .code-block .string { color: #34d399; }
+    .code-panel { display: none; }
+    .code-panel.active { display: block; }
+
+    .comparison { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
+    .comparison h2 { text-align: center; font-size: 2rem; margin-bottom: 2rem; }
+    .comparison table { width: 100%; border-collapse: collapse; }
+    .comparison th, .comparison td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+    .comparison th { font-weight: 600; background: var(--card-bg); }
+    .highlight-row { background: var(--accent-light); }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
+
+    @media (max-width: 640px) { .hero h1 { font-size: 2rem; } nav .links { gap: 1rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">SwarmBrowser</div>
+  <div class="links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#api">API</a>
+    <a href="#pricing" class="btn btn-primary">Get Started</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Headless browsing from <span>anywhere</span></h1>
+  <p>Screenshot, scrape, and render web pages from 4 continents. See how your site loads in Asia, Europe, and North America. API-first, pay with USDC.</p>
+  <div class="hero-btns">
+    <a href="#pricing" class="btn btn-primary">Start Free — 100 pages/day</a>
+    <a href="#api" class="btn btn-outline">API Documentation</a>
+  </div>
+</section>
+
+<div class="use-cases">
+  <div class="use-case-tag">Screenshots</div>
+  <div class="use-case-tag">PDF Generation</div>
+  <div class="use-case-tag">Web Scraping</div>
+  <div class="use-case-tag">SEO Auditing</div>
+  <div class="use-case-tag">Performance Testing</div>
+  <div class="use-case-tag">Compliance</div>
+</div>
+
+<section class="features" id="features">
+  <h2>Why SwarmBrowser?</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <h3>Render from Any Continent</h3>
+      <p>Choose where the page loads: Canada, Frankfurt, Singapore, or the UK. Test how your CDN performs from Asia vs Europe.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Full Browser Rendering</h3>
+      <p>Headless Chromium renders JavaScript, CSS animations, web fonts — everything. Get the real page, not a simplified version.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Screenshot + PDF + Scrape</h3>
+      <p>One API, three outputs. Take screenshots, generate PDFs, or extract structured data with CSS selectors.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Batch Processing</h3>
+      <p>Submit up to 100 URLs at once. Process in parallel across all nodes. Get results fast.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Performance Metrics</h3>
+      <p>Every request returns load time, DOM content loaded, first paint, resource count, and total bytes — from the actual render location.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Pay with USDC</h3>
+      <p>Monthly subscription in USDC. Free tier with 100 pages/day to get started. No credit card required.</p>
+    </div>
+  </div>
+</section>
+
+<section class="how-it-works">
+  <h2>How It Works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Send a URL</h3>
+      <p>POST to our API with the URL and desired output (screenshot, PDF, or scrape).</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>We Render It</h3>
+      <p>Headless Chrome on our k3s cluster loads the page from your chosen location.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Get Results</h3>
+      <p>Receive your screenshot, PDF, extracted data, or performance metrics in seconds.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <h2>Simple Pricing</h2>
+  <p class="subtitle">Pay with USDC. Free tier included.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>Free</h3>
+      <div class="price">$0 <span>/mo</span></div>
+      <p class="price-note">Get started instantly</p>
+      <ul>
+        <li>100 pages/day</li>
+        <li>1 location</li>
+        <li>Screenshot + PDF + Scrape</li>
+        <li>Performance metrics</li>
+      </ul>
+      <a href="#" class="btn btn-outline" style="width:100%">Get API Key</a>
+    </div>
+    <div class="price-card featured">
+      <h3>Pro</h3>
+      <div class="price">$20 <span>/mo USDC</span></div>
+      <p class="price-note">For production use</p>
+      <ul>
+        <li>10,000 pages/day</li>
+        <li>All 4 locations</li>
+        <li>Screenshot + PDF + Scrape</li>
+        <li>Batch processing (100 URLs)</li>
+        <li>Performance metrics</li>
+        <li>Priority rendering</li>
+      </ul>
+      <a href="#" class="btn btn-primary" style="width:100%">Start Pro</a>
+    </div>
+    <div class="price-card">
+      <h3>Business</h3>
+      <div class="price">$100 <span>/mo USDC</span></div>
+      <p class="price-note">High volume</p>
+      <ul>
+        <li>100,000 pages/day</li>
+        <li>All 4 locations</li>
+        <li>All features</li>
+        <li>Batch processing (100 URLs)</li>
+        <li>Custom user agents</li>
+        <li>Resource blocking</li>
+        <li>Priority support</li>
+      </ul>
+      <a href="#" class="btn btn-outline" style="width:100%">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<section class="api-example" id="api">
+  <h2>API Examples</h2>
+
+  <div class="code-tabs">
+    <button class="code-tab active" onclick="showTab('screenshot')">Screenshot</button>
+    <button class="code-tab" onclick="showTab('pdf')">PDF</button>
+    <button class="code-tab" onclick="showTab('scrape')">Scrape</button>
+    <button class="code-tab" onclick="showTab('batch')">Batch</button>
+  </div>
+
+  <div class="code-panel active" id="tab-screenshot">
+    <div class="code-block">
+<span class="comment"># Take a screenshot from Singapore</span>
+curl -X POST https://api.swarmbrowser.example.com/v1/screenshot \
+  -H <span class="string">'Content-Type: application/json'</span> \
+  -H <span class="string">'X-API-Key: your-key'</span> \
+  -d <span class="string">'{
+    "url": "https://example.com",
+    "width": 1280,
+    "height": 720,
+    "format": "png",
+    "fullPage": true
+  }'</span> --output screenshot.png
+
+<span class="comment"># Response headers include:</span>
+<span class="comment"># X-Load-Time: 1234</span>
+<span class="comment"># X-Location: k3s-sg</span>
+<span class="comment"># X-Resource-Count: 42</span>
+    </div>
+  </div>
+
+  <div class="code-panel" id="tab-pdf">
+    <div class="code-block">
+<span class="comment"># Generate PDF</span>
+curl -X POST https://api.swarmbrowser.example.com/v1/pdf \
+  -H <span class="string">'Content-Type: application/json'</span> \
+  -H <span class="string">'X-API-Key: your-key'</span> \
+  -d <span class="string">'{
+    "url": "https://example.com/invoice",
+    "format": "A4",
+    "landscape": false,
+    "printBackground": true
+  }'</span> --output page.pdf
+    </div>
+  </div>
+
+  <div class="code-panel" id="tab-scrape">
+    <div class="code-block">
+<span class="comment"># Scrape page content</span>
+curl -X POST https://api.swarmbrowser.example.com/v1/scrape \
+  -H <span class="string">'Content-Type: application/json'</span> \
+  -H <span class="string">'X-API-Key: your-key'</span> \
+  -d <span class="string">'{
+    "url": "https://example.com",
+    "extract": ["title", "meta", "links", "headings"],
+    "selectors": {
+      "price": ".product-price",
+      "name": "h1.product-title"
+    }
+  }'</span>
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"content"</span>: {
+    <span class="string">"title"</span>: <span class="string">"Example Product"</span>,
+    <span class="string">"headings"</span>: [{ <span class="string">"level"</span>: 1, <span class="string">"text"</span>: <span class="string">"..."</span> }]
+  },
+  <span class="string">"selectors"</span>: {
+    <span class="string">"price"</span>: <span class="string">"$29.99"</span>,
+    <span class="string">"name"</span>: <span class="string">"Example Product"</span>
+  },
+  <span class="string">"metrics"</span>: { <span class="string">"loadTime"</span>: 1234 }
+}
+    </div>
+  </div>
+
+  <div class="code-panel" id="tab-batch">
+    <div class="code-block">
+<span class="comment"># Batch scrape 10 URLs</span>
+curl -X POST https://api.swarmbrowser.example.com/v1/batch \
+  -H <span class="string">'Content-Type: application/json'</span> \
+  -H <span class="string">'X-API-Key: your-key'</span> \
+  -d <span class="string">'{
+    "urls": [
+      "https://example.com/page1",
+      "https://example.com/page2",
+      "https://example.com/page3"
+    ],
+    "action": "scrape",
+    "options": {
+      "extract": ["title", "text"]
+    }
+  }'</span>
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"total"</span>: 3,
+  <span class="string">"completed"</span>: 3,
+  <span class="string">"failed"</span>: 0,
+  <span class="string">"results"</span>: [...]
+}
+    </div>
+  </div>
+</section>
+
+<section class="comparison">
+  <h2>How We Compare</h2>
+  <table>
+    <thead>
+      <tr><th>Feature</th><th>SwarmBrowser</th><th>Browserless</th><th>ScrapingBee</th><th>Apify</th></tr>
+    </thead>
+    <tbody>
+      <tr class="highlight-row"><td>Starting price</td><td>Free / $20/mo</td><td>$40/mo</td><td>$49/mo</td><td>$49/mo</td></tr>
+      <tr><td>Geographic rendering</td><td>4 continents</td><td>1 region</td><td>Proxy-based</td><td>Proxy-based</td></tr>
+      <tr><td>Screenshot + PDF + Scrape</td><td>All included</td><td>All included</td><td>Scrape only</td><td>Scrape-focused</td></tr>
+      <tr><td>USDC payment</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+      <tr><td>Batch processing</td><td>100 URLs</td><td>Varies</td><td>Yes</td><td>Yes</td></tr>
+      <tr><td>Performance metrics</td><td>Per-request</td><td>No</td><td>No</td><td>No</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  <p><a href="terms.html">Terms of Service</a> &middot; <a href="mailto:support@swarmbrowser.example.com">Contact</a></p>
+  <p style="margin-top:0.5rem">Headless browser API from 4 continents.</p>
+</footer>
+
+<script>
+  function showTab(name) {
+    document.querySelectorAll('.code-panel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.code-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
