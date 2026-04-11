@@ -5,6 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SwarmBrowser — Headless Browser API from Anywhere</title>
   <meta name="description" content="Render, screenshot, scrape, and generate PDFs from 4 continents. See how your site looks from Singapore, Frankfurt, Canada, or the UK." />
+  <meta name="keywords" content="headless browser API, screenshot API, web scraping API, PDF generation API, headless Chrome, browser rendering, multi-region rendering, browserless alternative">
+  <link rel="canonical" href="https://swarmbrowser.net/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F310;</text></svg>">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://swarmbrowser.net/">
+  <meta property="og:title" content="SwarmBrowser — Headless Browser API from Anywhere">
+  <meta property="og:description" content="Screenshot, scrape, and render web pages from 4 continents. Free tier: 100 pages/day. Pay with card or USDC.">
+  <meta property="og:image" content="https://swarmbrowser.net/og-image.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SwarmBrowser — Headless Browser API from Anywhere">
+  <meta name="twitter:description" content="Screenshot, scrape, and render web pages from 4 continents. Free tier: 100 pages/day. Pay with card or USDC.">
+  <meta name="twitter:image" content="https://swarmbrowser.net/og-image.png">
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SwarmBrowser",
+    "description": "Headless browser API from 4 continents. Screenshot, scrape, render, and generate PDFs from Canada, Singapore, Frankfurt, and the UK.",
+    "url": "https://swarmbrowser.net",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": [
+      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "description": "100 pages/day, 1 location" },
+      { "@type": "Offer", "name": "Pro", "price": "20", "priceCurrency": "USD", "description": "10,000 pages/day, all 4 locations" },
+      { "@type": "Offer", "name": "Business", "price": "100", "priceCurrency": "USD", "description": "100,000 pages/day, all 4 locations" }
+    ]
+  }
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -341,8 +372,18 @@ curl -X POST https://api.swarmbrowser.example.com/v1/batch \
 </section>
 
 <footer>
-  <p><a href="terms.html">Terms of Service</a> &middot; <a href="mailto:support@swarmbrowser.example.com">Contact</a></p>
+  <p><a href="terms.html">Terms of Service</a> &middot; <a href="mailto:support@swarmbrowser.net">Contact</a></p>
   <p style="margin-top:0.5rem">Headless browser API from 4 continents.</p>
+  <div style="margin-top:1rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;font-size:0.8rem;">
+    <span style="color:var(--muted)">Also from us:</span>
+    <a href="https://sertone.net" style="color:var(--muted)">Sertone</a>
+    <a href="https://l2aas.net" style="color:var(--muted)">L2aaS</a>
+    <a href="https://chainrpc.net" style="color:var(--muted)">ChainRPC</a>
+    <a href="https://chainclone.net" style="color:var(--muted)">ChainClone</a>
+    <a href="https://pingdog.net" style="color:var(--muted)">PingDog</a>
+    <a href="https://theloadtester.com" style="color:var(--muted)">LoadTester</a>
+  </div>
+  <p style="margin-top:0.5rem">&copy; 2026 SwarmBrowser</p>
 </footer>
 
 <script>
