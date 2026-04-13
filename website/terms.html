@@ -1,67 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Terms of Service — SwarmBrowser</title>
+  <meta name="description" content="SwarmBrowser Terms of Service.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230891b2'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23fff'/%3E%3Ccircle cx='16' cy='8' r='2' fill='%23fff'/%3E%3Ccircle cx='24' cy='8' r='2' fill='%23fff'/%3E%3Ccircle cx='8' cy='16' r='2' fill='%23fff'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23fff'/%3E%3Ccircle cx='24' cy='16' r='2' fill='%23fff'/%3E%3Ccircle cx='8' cy='24' r='2' fill='%23fff'/%3E%3Ccircle cx='16' cy='24' r='2' fill='%23fff'/%3E%3Ccircle cx='24' cy='24' r='2' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #111827; background: #fff; line-height: 1.7; }
-    .container { max-width: 700px; margin: 0 auto; padding: 3rem 2rem; }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-    .date { color: #6b7280; margin-bottom: 2rem; }
-    h2 { font-size: 1.2rem; margin-top: 2rem; margin-bottom: 0.5rem; }
-    p, li { margin-bottom: 0.75rem; color: #374151; }
-    ul { padding-left: 1.5rem; }
-    a { color: #059669; }
-    footer { text-align: center; padding: 2rem; color: #6b7280; font-size: 0.85rem; border-top: 1px solid #e5e7eb; margin-top: 3rem; }
+    :root { --teal: #0891b2; --text: #0f172a; --text-secondary: #475569; --border: #e2e8f0; --bg: #fff; --bg-alt: #f8fafc; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; -webkit-font-smoothing: antialiased; font-size: 0.95rem; }
+    a { color: var(--teal); }
+    .container { max-width: 760px; margin: 0 auto; padding: 48px 24px 80px; }
+    nav { background: rgba(255,255,255,0.95); border-bottom: 1px solid var(--border); padding: 16px 0; }
+    nav .inner { max-width: 760px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; }
+    .logo svg { width: 26px; height: 26px; }
+    h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .effective { color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 40px; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin: 36px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+    h3 { font-size: 0.95rem; font-weight: 600; margin: 20px 0 8px; }
+    p { margin-bottom: 14px; color: var(--text-secondary); }
+    ul, ol { padding-left: 22px; margin-bottom: 14px; color: var(--text-secondary); }
+    li { margin-bottom: 6px; }
+    .highlight { background: #fef3c7; border-left: 3px solid #d97706; padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0; }
+    .highlight p { margin: 0; color: #92400e; font-weight: 500; }
+    footer { border-top: 1px solid var(--border); padding: 24px 0; margin-top: 40px; text-align: center; font-size: 0.8rem; color: #94a3b8; }
   </style>
 </head>
 <body>
+
+<nav>
+  <div class="inner">
+    <a href="/" class="logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="6" fill="#0891b2"/>
+        <circle cx="8" cy="8" r="2" fill="white" opacity="0.9"/>
+        <circle cx="16" cy="8" r="2" fill="white" opacity="0.9"/>
+        <circle cx="24" cy="8" r="2" fill="white" opacity="0.9"/>
+        <circle cx="8" cy="16" r="2" fill="white" opacity="0.9"/>
+        <circle cx="16" cy="16" r="2.5" fill="white"/>
+        <circle cx="24" cy="16" r="2" fill="white" opacity="0.9"/>
+        <circle cx="8" cy="24" r="2" fill="white" opacity="0.9"/>
+        <circle cx="16" cy="24" r="2" fill="white" opacity="0.9"/>
+        <circle cx="24" cy="24" r="2" fill="white" opacity="0.9"/>
+      </svg>
+      <span>Swarm<span style="color:var(--teal)">Browser</span></span>
+    </a>
+    <a href="/" style="font-size:0.9rem;color:var(--text-secondary);">Home</a>
+  </div>
+</nav>
+
 <div class="container">
   <h1>Terms of Service</h1>
-  <p class="date">Last updated: April 9, 2026</p>
+  <p class="effective">Effective date: April 12, 2026 &nbsp;&middot;&nbsp; Last updated: April 12, 2026</p>
 
-  <h2>1. Service Description</h2>
-  <p>SwarmBrowser provides headless browser rendering as a service. We render web pages using headless Chromium and return screenshots, PDFs, extracted content, and performance metrics.</p>
+  <div class="highlight"><p>PLEASE READ THESE TERMS CAREFULLY. BY USING SWARMBROWSER YOU AGREE TO ALL TERMS BELOW. IF YOU DISAGREE, DO NOT USE THE SERVICE.</p></div>
 
-  <h2>2. Acceptable Use</h2>
-  <p>You may use SwarmBrowser for legitimate purposes including:</p>
+  <h2>1. Acceptance of Terms</h2>
+  <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("User," "you," or "your") and the operator of SwarmBrowser ("SwarmBrowser," "we," "us," or "our"). By accessing or using the SwarmBrowser website at swarmbrowser.net, the SwarmBrowser API at api.swarmbrowser.net, any related services, software, or documentation (collectively, the "Service"), you acknowledge that you have read, understood, and agree to be bound by these Terms in their entirety.</p>
+  <p>If you are using the Service on behalf of an organization or business, you represent and warrant that you have the authority to bind that organization to these Terms and that the organization agrees to be bound by them. In that case, "you" and "your" refers to both you individually and the organization.</p>
+  <p>We reserve the right to update these Terms at any time. Continued use of the Service after any update constitutes acceptance of the updated Terms. Material changes will be noted by an updated "Last updated" date.</p>
+
+  <h2>2. Description of Service</h2>
+  <p>SwarmBrowser provides a cloud-based headless browser API that enables users to programmatically render web pages, capture screenshots, generate PDF documents, extract structured data via web scraping, and execute batch rendering jobs across multiple geographic regions simultaneously (collectively, "Browser Services").</p>
+  <p>SwarmBrowser also provides geographic comparison and visual diff capabilities allowing users to render the same URL from multiple regions and detect visual and content differences.</p>
+  <p>The Service is provided as-is and on an as-available basis. Features may be added, modified, or removed at any time without prior notice. The Service is intended for lawful use by developers, businesses, and technical users with a legitimate purpose for programmatic web rendering.</p>
+
+  <h2>3. Eligibility</h2>
+  <p>You must be at least 18 years of age to use the Service. By using the Service, you represent that you are at least 18 years old and have full legal capacity to enter into a binding agreement.</p>
+  <p>The Service is not available in jurisdictions where it is prohibited by law. You are responsible for ensuring that your use of the Service complies with all applicable laws in your jurisdiction.</p>
+  <p>We reserve the right to refuse service to anyone at any time for any reason, including but not limited to violations of these Terms or any applicable law.</p>
+
+  <h2>4. API Keys and Account Identity</h2>
+  <p>Access to the Service is governed by API keys ("Keys") beginning with the prefix <code>rpk_</code>. Keys are generated on the SwarmBrowser website without requiring registration, email, or personal identification. Your Key is your sole means of identity with the Service.</p>
+  <p>You are solely and entirely responsible for all activity conducted using your Key. You must treat your Key as a secret credential. Do not share your Key with unauthorized parties, embed it in publicly accessible code repositories, or expose it in client-side code visible to end users.</p>
+  <p>SwarmBrowser stores only a cryptographic hash of your Key and cannot recover or display your original Key if lost. If your Key is lost or compromised, you must generate a new Key. No liability is assumed for unauthorized access resulting from Key compromise.</p>
+  <p>SwarmBrowser reserves the right to revoke, suspend, or rotate any Key that is associated with abuse, violations of these Terms, or suspected compromise, without prior notice.</p>
+
+  <h2>5. Free Tier</h2>
+  <p>SwarmBrowser offers a free tier that provides limited access to the Service at no cost. The free tier includes up to 100 pages per day rendered from a single geographic region. Free tier limits are subject to change without notice.</p>
+  <p>The free tier is provided for evaluation, development, and low-volume personal use only. Commercial use of the free tier at scale, or any use designed to circumvent paid tier requirements, is prohibited and may result in immediate termination of access.</p>
+  <p>SwarmBrowser makes no guarantees of availability, performance, or continuity for free tier users. Free tier access may be suspended or terminated at any time without notice.</p>
+
+  <h2>6. Paid Subscriptions</h2>
+  <p>Paid subscriptions unlock higher daily page limits, access to all geographic regions, larger batch sizes, and priority queue processing. Paid plans are billed on a monthly basis in USDC or USDT stablecoins.</p>
+  <p>Subscription billing is handled via a smart contract on the Demo L2 network (chain ID 845302) or such other network as we may designate from time to time. By subscribing, you authorize SwarmBrowser to pull monthly subscription fees from your approved token allowance.</p>
+  <p>All subscription fees are stated in US dollars and are payable in the equivalent value of USDC or USDT as denominated in the contract. Prices are displayed inclusive of all fees.</p>
+  <p>Subscriptions renew automatically on a monthly basis. There is no annual commitment. You may cancel at any time by revoking your USDC or USDT approval in your cryptocurrency wallet. Cancellation takes effect immediately upon revocation of the approval.</p>
+
+  <h2>7. Overflow Charges</h2>
+  <p>Paid subscribers who exceed their daily page limit are not blocked. Additional pages beyond the daily limit are billed at the overflow rate of $0.50 (USD) per 1,000 pages, or as otherwise posted on the pricing page.</p>
+  <p>Overflow charges are pulled automatically from your approved token allowance. If your allowance is insufficient to cover overflow charges, rendering will be suspended until additional allowance is approved.</p>
+  <p>SwarmBrowser will not pull funds in excess of your approved allowance. You are responsible for maintaining sufficient allowance to cover your anticipated usage including overflow.</p>
+
+  <h2>8. Payment and Billing</h2>
+  <p>All payments are processed via cryptocurrency smart contracts. By subscribing or approving an allowance, you acknowledge that: (a) cryptocurrency transactions are irreversible; (b) SwarmBrowser has no ability to reverse or refund transactions once confirmed on the blockchain; (c) you are responsible for any gas fees or network fees associated with your transactions; and (d) you bear all risks associated with cryptocurrency volatility and smart contract interaction.</p>
+  <p>SwarmBrowser does not accept credit cards, bank transfers, PayPal, or any fiat currency payment method. The Service is accessible only to users capable of and willing to pay in USDC or USDT on the supported network.</p>
+  <p>All fees are non-refundable unless required by applicable law. No credits or refunds will be issued for unused pages, partial months, outages of less than 24 continuous hours, or any other reason.</p>
+
+  <h2>9. Refund Policy</h2>
+  <p>All payments are final and non-refundable. SwarmBrowser does not offer refunds for any reason, including but not limited to: accidental subscription, dissatisfaction with the Service, change of mind, technical issues on the user's end, or discontinuation of use.</p>
+  <p>In the event of a material service outage directly attributable to SwarmBrowser lasting more than 72 continuous hours, SwarmBrowser may, at its sole discretion, provide a pro-rated credit toward future service. Such credit is not a refund and has no cash value.</p>
+
+  <h2>10. Acceptable Use Policy</h2>
+  <p>You agree to use the Service only for lawful purposes and in a manner that does not infringe the rights of others. The following uses are expressly prohibited:</p>
   <ul>
-    <li>Generating screenshots and PDFs of your own content</li>
-    <li>SEO auditing of sites you own or manage</li>
-    <li>Scraping publicly available data in compliance with target site terms</li>
-    <li>Performance testing of your own properties</li>
+    <li>Rendering or scraping content for which you do not have authorization from the target website operator, where such authorization is required by law or the target site's terms of service;</li>
+    <li>Collecting, harvesting, or processing personal data (as defined under applicable privacy laws including GDPR, CCPA, and similar regulations) without appropriate legal basis, consent, and compliance with all applicable data protection laws;</li>
+    <li>Circumventing paywalls, subscription gates, login requirements, or any access control mechanism implemented by target websites;</li>
+    <li>Using the batch processing feature in a manner that constitutes a distributed denial of service (DDoS) attack against any website or web infrastructure;</li>
+    <li>Scraping content protected by copyright, trade secret, or other intellectual property laws for purposes that exceed fair use or that are prohibited by applicable law;</li>
+    <li>Rendering content containing child sexual abuse material (CSAM) or any content that exploits minors;</li>
+    <li>Using the Service to facilitate fraud, phishing, malware distribution, or any other malicious activity;</li>
+    <li>Rendering or capturing content from systems without authorization, including internal tools, private APIs, or extranet applications to which you have no authorized access;</li>
+    <li>Reselling, sublicensing, or commercializing access to the Service without explicit written authorization from SwarmBrowser;</li>
+    <li>Using the Service to generate screenshots or content for the purpose of spreading disinformation, creating deepfakes, or impersonating individuals or organizations;</li>
+    <li>Attempting to reverse-engineer, circumvent, or interfere with the SwarmBrowser infrastructure, API, or authentication systems;</li>
+    <li>Using the Service in a manner that would impose an unreasonable or disproportionate load on the SwarmBrowser infrastructure;</li>
+    <li>Using the Service in violation of any law, regulation, treaty, or directive applicable to you or to the content being rendered.</li>
   </ul>
-  <p>You must NOT use SwarmBrowser to:</p>
-  <ul>
-    <li>Scrape personal data or PII without consent</li>
-    <li>Circumvent access controls or authentication</li>
-    <li>Violate the terms of service of target websites</li>
-    <li>Generate content that violates any laws</li>
-    <li>Overload or attack target websites</li>
-  </ul>
 
-  <h2>3. Rate Limits</h2>
-  <p>Usage is limited by your subscription tier. Exceeding limits may result in throttling or temporary suspension.</p>
+  <h2>11. Responsibility for Target Site Compliance</h2>
+  <p>When you use SwarmBrowser to render, screenshot, scrape, or otherwise interact with a third-party website, you are solely responsible for ensuring that your use complies with: (a) the terms of service of the target website; (b) the target website's robots.txt directives and crawling policies; (c) applicable laws governing data collection, privacy, and web scraping in your jurisdiction and the jurisdiction of the target site; and (d) any contractual obligations you may have with the target website.</p>
+  <p>SwarmBrowser is a neutral rendering infrastructure and does not monitor, evaluate, or approve the target URLs submitted to the API. We are not responsible for any legal consequences arising from your choice of target URLs or your use of extracted data.</p>
 
-  <h2>4. Payment</h2>
-  <p>Paid tiers are billed monthly in USDC. All payments are non-refundable.</p>
+  <h2>12. Data Handling and Privacy</h2>
+  <p>SwarmBrowser does not store, retain, log, or share the contents of screenshots, PDFs, or scraped data after delivery to the requesting user. Rendered content is held in memory only for the duration of processing and is discarded immediately upon delivery.</p>
+  <p>SwarmBrowser may collect and retain the following operational data: API key hashes (not raw keys), timestamps of API requests, rendered URL origins (domain only, not full path), response codes, and performance metrics. This data is used solely for rate limiting, abuse prevention, billing verification, and service improvement.</p>
+  <p>SwarmBrowser does not sell, rent, or share operational data with third parties except as required by law or legal process. We do not use operational data for advertising or profiling.</p>
+  <p>By using the Service, you acknowledge that you have read and understood our data handling practices as described in this section and that you consent to such practices.</p>
 
-  <h2>5. Data</h2>
-  <p>We do not store the content of rendered pages beyond the duration of the request. Screenshots and PDFs are returned directly and not retained on our servers.</p>
+  <h2>13. Intellectual Property</h2>
+  <p>All intellectual property rights in the SwarmBrowser Service, including but not limited to the API, software, algorithms, user interface, documentation, brand, logo, and trade dress, are owned by or licensed to SwarmBrowser. Nothing in these Terms grants you any right, title, or interest in or to the SwarmBrowser intellectual property.</p>
+  <p>You retain all intellectual property rights in content you render through the Service. SwarmBrowser claims no ownership over screenshots, PDFs, or extracted data generated using the Service, provided that such content was produced in accordance with these Terms.</p>
+  <p>You grant SwarmBrowser a limited, non-exclusive, royalty-free license to process your API requests, render the specified URLs, and deliver results to you for the sole purpose of providing the Service.</p>
 
-  <h2>6. Liability</h2>
-  <p>SwarmBrowser is provided "as is" without warranties. We are not responsible for the accuracy or completeness of scraped content, or for any consequences of using the service.</p>
+  <h2>14. Third-Party Content and Services</h2>
+  <p>The Service renders content from third-party websites. SwarmBrowser makes no representations or warranties regarding the accuracy, legality, or appropriateness of third-party content. SwarmBrowser is not responsible for any third-party content rendered through the Service.</p>
+  <p>The Service may depend on third-party infrastructure, cloud providers, and network services. SwarmBrowser is not liable for outages, disruptions, or degraded performance caused by third parties.</p>
 
-  <h2>7. Termination</h2>
-  <p>We may terminate accounts that violate these terms or abuse the service.</p>
+  <h2>15. Disclaimers of Warranty</h2>
+  <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, ACCURACY, COMPLETENESS, OR UNINTERRUPTED AVAILABILITY.</p>
+  <p>SwarmBrowser does not warrant that: (a) the Service will meet your requirements; (b) the Service will be available at any specific time or location; (c) rendering results will be accurate, complete, or identical to what a human user would see in a live browser; (d) the Service will be free of errors, bugs, or security vulnerabilities; or (e) any defects in the Service will be corrected.</p>
+  <p>Geographic comparison and diff detection features are provided for informational purposes only. Results may vary based on network conditions, caching, CDN behavior, and other factors outside SwarmBrowser's control. SwarmBrowser makes no warranty that geographic rendering results accurately reflect the experience of all users in those locations.</p>
 
-  <h2>8. Changes</h2>
-  <p>These terms may be updated at any time. Continued use constitutes acceptance.</p>
+  <h2>16. Limitation of Liability</h2>
+  <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL SWARMBROWSER, ITS OPERATORS, AFFILIATES, LICENSORS, SERVICE PROVIDERS, EMPLOYEES, AGENTS, OFFICERS, OR DIRECTORS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, PUNITIVE, OR EXEMPLARY DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, LOSS OF DATA, LOSS OF BUSINESS, LOSS OF GOODWILL, BUSINESS INTERRUPTION, OR COST OF SUBSTITUTE SERVICES, ARISING OUT OF OR RELATED TO YOUR USE OF OR INABILITY TO USE THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+  <p>IN ALL CASES, THE TOTAL CUMULATIVE LIABILITY OF SWARMBROWSER TO YOU FOR ANY CLAIM ARISING OUT OF OR RELATED TO THESE TERMS OR THE SERVICE SHALL NOT EXCEED ONE US DOLLAR ($1.00).</p>
+  <p>Some jurisdictions do not allow the exclusion or limitation of certain categories of damages. In such jurisdictions, the limitations above apply to the fullest extent permitted by law.</p>
+
+  <h2>17. Indemnification</h2>
+  <p>You agree to defend, indemnify, and hold harmless SwarmBrowser, its operators, affiliates, licensors, and service providers, and their respective officers, directors, employees, contractors, agents, licensors, suppliers, successors, and assigns from and against any claims, liabilities, damages, judgments, awards, losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to: (a) your use of the Service; (b) your violation of these Terms; (c) your violation of any applicable law or regulation; (d) your infringement of any intellectual property or other rights of any third party; (e) your use of the Service to access or render third-party content; or (f) any data you collect, process, or store using the Service.</p>
+
+  <h2>18. Service Availability and Uptime</h2>
+  <p>SwarmBrowser does not guarantee any specific level of availability or uptime. We target high availability but make no service level agreement (SLA) commitments to free tier users or to paid users unless a separate SLA agreement has been executed in writing.</p>
+  <p>The Service may be unavailable due to scheduled maintenance, emergency maintenance, infrastructure failures, force majeure events, or other circumstances beyond our reasonable control. We will endeavor to provide advance notice of scheduled maintenance where practicable but are not obligated to do so.</p>
+  <p>Individual geographic regions may experience degraded performance or complete outages without affecting other regions. Per-region errors in the <code>/v1/compare</code> and <code>/v1/diff</code> endpoints do not constitute service failures under these Terms.</p>
+
+  <h2>19. Rate Limiting and Fair Use</h2>
+  <p>SwarmBrowser implements rate limiting to ensure fair access and protect infrastructure integrity. Rate limits are applied per API key based on the tier associated with that key. Rate limits are subject to change without notice.</p>
+  <p>Attempting to circumvent rate limits by generating multiple Keys, cycling Keys, or using technical means to bypass limits is a violation of these Terms and may result in immediate termination of all associated Keys.</p>
+  <p>SwarmBrowser reserves the right to temporarily or permanently throttle, suspend, or terminate access for any Key that, in our sole judgment, is causing unreasonable strain on the infrastructure, regardless of whether the key is within its nominal rate limit.</p>
+
+  <h2>20. Batch Processing Terms</h2>
+  <p>Batch processing is available to paid subscribers only. Batch jobs are queued and processed based on available capacity. Estimated completion times are provided as approximations only and are not guaranteed.</p>
+  <p>Batch jobs that fail due to invalid URLs, timeouts, or target site errors are counted toward your daily page limit. Failed URLs are reported in the batch result with an error field; they are not retried automatically.</p>
+  <p>SwarmBrowser reserves the right to cancel batch jobs that are submitted in violation of these Terms, that target prohibited content categories, or that pose a risk to infrastructure stability, without refund or credit.</p>
+
+  <h2>21. dApp Rendering and Wallet Injection</h2>
+  <p>The dApp rendering feature allows users to inject simulated wallet state into rendered pages. This feature is intended solely for legitimate development, testing, QA, and monitoring purposes. You must not use this feature to: capture wallet interfaces with injected addresses you do not own; simulate financial transactions for deceptive purposes; generate screenshots intended to mislead others about wallet balances or DeFi positions; or engage in any form of financial fraud or misrepresentation.</p>
+  <p>The injected wallet state is entirely simulated and does not interact with any actual blockchain network. No real transactions are initiated by the rendering process.</p>
+
+  <h2>22. Webhooks</h2>
+  <p>If you provide a webhook URL for batch job notifications, you are responsible for ensuring that your webhook endpoint is secure, available, and capable of receiving POST requests from SwarmBrowser's IP ranges. SwarmBrowser is not liable for failed webhook deliveries due to your endpoint being unavailable or returning error responses.</p>
+  <p>SwarmBrowser will make reasonable efforts to deliver webhook notifications but does not guarantee delivery. Webhook payloads may contain screenshots or scraped data in base64 format; you are responsible for securing this data upon receipt.</p>
+
+  <h2>23. Modifications to the Service</h2>
+  <p>SwarmBrowser reserves the right, at any time and without notice, to: modify, suspend, or discontinue any aspect of the Service; change API endpoints, request formats, or response formats; add, remove, or change geographic rendering regions; adjust rate limits or pricing; and introduce new features or retire existing features.</p>
+  <p>We will endeavor to maintain backward compatibility where feasible, but we make no guarantee of API stability. Major breaking changes to the API will be communicated via the website documentation with reasonable advance notice where practicable.</p>
+
+  <h2>24. Termination</h2>
+  <p>SwarmBrowser reserves the right to suspend or terminate your access to the Service, with or without notice, for any reason, including but not limited to violation of these Terms, non-payment, abuse, or any activity that in our sole judgment poses a risk to the Service or to third parties.</p>
+  <p>Upon termination, your API key will be deactivated and all access to the Service will cease immediately. SwarmBrowser is not obligated to provide you with any data, export, or backup upon termination.</p>
+  <p>You may terminate your use of the Service at any time by simply ceasing to use it and revoking any cryptocurrency approvals you have granted. You have no obligation to notify SwarmBrowser of your termination.</p>
+
+  <h2>25. Governing Law</h2>
+  <p>These Terms and any dispute arising out of or related to the Service shall be governed by and construed in accordance with the laws of the State of Wyoming, United States, without regard to its conflict of law provisions. The United Nations Convention on Contracts for the International Sale of Goods does not apply to these Terms.</p>
+
+  <h2>26. Dispute Resolution and Binding Arbitration</h2>
+  <p>PLEASE READ THIS SECTION CAREFULLY. IT AFFECTS YOUR LEGAL RIGHTS.</p>
+  <p>Any dispute, claim, or controversy arising out of or relating to these Terms or the Service, including any question regarding its existence, validity, or termination ("Dispute"), shall be resolved exclusively through final and binding individual arbitration. The arbitration shall be conducted in English under the rules of the American Arbitration Association ("AAA") Commercial Arbitration Rules in effect at the time the Dispute is submitted.</p>
+  <p>The arbitration shall be conducted in Sheridan County, Wyoming, United States, or via video conference if both parties agree. The arbitrator shall have authority to award any remedy available in law or equity, except that the arbitrator may not award injunctive relief in favor of the arbitrator's own findings if such relief would affect persons who are not parties to the arbitration.</p>
+  <p>YOU AND SWARMBROWSER EACH WAIVE THE RIGHT TO A TRIAL BY JURY AND THE RIGHT TO PARTICIPATE IN ANY CLASS ACTION, CLASS ARBITRATION, OR CONSOLIDATED PROCEEDING. IF THIS CLASS ACTION WAIVER IS FOUND UNENFORCEABLE, THE ARBITRATION CLAUSE SHALL NOT APPLY AND THE DISPUTE SHALL BE RESOLVED IN COURT AS PROVIDED IN SECTION 25.</p>
+  <p>The arbitrator's decision shall be final and binding and may be entered as a judgment in any court of competent jurisdiction. The arbitration shall be kept confidential by both parties.</p>
+  <p>Nothing in this section shall prevent either party from seeking emergency injunctive or other interim relief from a court of competent jurisdiction to prevent irreparable harm pending the outcome of arbitration.</p>
+
+  <h2>27. Operator Information</h2>
+  <p>SwarmBrowser is operated by Mesa Operations LLC, a Wyoming limited liability company located at 30 N Gould St Ste R, Sheridan, WY 82801, United States. Mesa Operations LLC is the legal entity responsible for the Service and these Terms.</p>
+  <p>For legal inquiries only, correspondence may be sent to the above address. SwarmBrowser does not provide customer support via postal mail. Do not send support requests, complaints, or other general correspondence to this address as they will not be processed.</p>
+
+  <h2>28. Electronic Communications</h2>
+  <p>By using the Service, you consent to receive electronic communications from SwarmBrowser, which may include notices posted on the website and communications delivered via API response headers or documentation. These communications satisfy any legal requirements that such communications be in writing.</p>
+
+  <h2>29. Force Majeure</h2>
+  <p>SwarmBrowser shall not be liable for any failure or delay in performance due to circumstances beyond its reasonable control, including but not limited to acts of God, war, terrorism, riots, embargoes, acts of civil or military authorities, fires, floods, earthquakes, or other natural disasters, power failures, internet outages, acts of hackers or denial-of-service attacks, or third-party service provider failures.</p>
+
+  <h2>30. Severability</h2>
+  <p>If any provision of these Terms is held to be invalid, illegal, or unenforceable under applicable law, such provision shall be modified to the minimum extent necessary to make it enforceable, or if not capable of modification, it shall be severed from these Terms. The remaining provisions of these Terms shall continue in full force and effect.</p>
+
+  <h2>31. Waiver</h2>
+  <p>No waiver by SwarmBrowser of any breach of these Terms shall constitute a waiver of any other or subsequent breach. Failure by SwarmBrowser to enforce any right or provision of these Terms shall not constitute a waiver of that right or provision.</p>
+
+  <h2>32. Entire Agreement</h2>
+  <p>These Terms constitute the entire agreement between you and SwarmBrowser with respect to the Service and supersede all prior or contemporaneous agreements, representations, warranties, and understandings, whether written or oral, relating to the Service.</p>
+  <p>These Terms do not create any agency, partnership, joint venture, or employment relationship between you and SwarmBrowser.</p>
+
+  <h2>33. Assignment</h2>
+  <p>You may not assign or transfer any rights or obligations under these Terms without the prior written consent of SwarmBrowser. SwarmBrowser may freely assign these Terms and its rights hereunder in connection with a merger, acquisition, sale of assets, or by operation of law.</p>
+
+  <h2>34. Export Controls</h2>
+  <p>You agree to comply with all applicable export control laws and regulations, including but not limited to the Export Administration Regulations ("EAR") of the United States Department of Commerce and the sanctions regulations of the Office of Foreign Assets Control ("OFAC"). You represent that you are not located in, under the control of, or a national or resident of any country subject to US embargo, and that you are not on any US government prohibited or restricted parties list.</p>
+
+  <h2>35. Children's Privacy</h2>
+  <p>The Service is not directed to or intended for use by children under the age of 18. SwarmBrowser does not knowingly collect personal information from minors. If you believe we have inadvertently collected information from a minor, please contact us and we will take steps to delete such information.</p>
+
+  <h2>36. Cryptocurrency Risk Acknowledgment</h2>
+  <p>By using cryptocurrency to pay for the Service, you acknowledge and accept the following risks: (a) cryptocurrency values are volatile and may decrease significantly in value; (b) cryptocurrency transactions are irreversible once confirmed; (c) smart contracts may contain bugs or vulnerabilities despite reasonable security practices; (d) regulatory changes may affect your ability to use cryptocurrency; and (e) you are solely responsible for the security of your cryptocurrency wallet and private keys.</p>
+  <p>SwarmBrowser is not a cryptocurrency exchange, broker, investment advisor, or financial institution. Nothing on the SwarmBrowser website or in the Service constitutes financial or investment advice.</p>
+
+  <h2>37. No Professional Advice</h2>
+  <p>Nothing in the Service or these Terms constitutes legal, financial, tax, technical, or professional advice. You should consult appropriate professionals before making decisions based on information obtained through the Service, including information about third-party websites rendered via the API.</p>
+
+  <h2>38. Links and Third-Party Services</h2>
+  <p>The SwarmBrowser website may contain links to third-party websites or services. These links are provided for convenience only. SwarmBrowser has no control over and assumes no responsibility for the content, privacy policies, or practices of any third-party websites or services. Your interaction with third-party websites is governed by their terms and privacy policies.</p>
+
+  <h2>39. Feedback</h2>
+  <p>If you submit suggestions, ideas, enhancement requests, recommendations, or other feedback about the Service ("Feedback"), you grant SwarmBrowser a perpetual, irrevocable, royalty-free, worldwide license to use, incorporate, and exploit such Feedback in any manner and for any purpose, including in the development of the Service, without any obligation of confidentiality or compensation to you.</p>
+
+  <h2>40. No Third-Party Beneficiaries</h2>
+  <p>These Terms are for the sole benefit of you and SwarmBrowser and their respective successors and permitted assigns. Nothing in these Terms, express or implied, is intended to or shall confer upon any other person or entity any legal or equitable right, benefit, or remedy of any nature whatsoever under or by reason of these Terms.</p>
+
+  <h2>41. Notices</h2>
+  <p>Any legal notices to SwarmBrowser must be sent in writing to the postal address in Section 27. Notices are effective upon receipt. We may provide notices to you by posting on the website, updating documentation, or including notices in API responses.</p>
+
+  <h2>42. Statute of Limitations</h2>
+  <p>YOU AGREE THAT ANY CAUSE OF ACTION ARISING OUT OF OR RELATED TO THE SERVICE MUST COMMENCE WITHIN ONE (1) YEAR AFTER THE CAUSE OF ACTION ACCRUES. OTHERWISE, SUCH CAUSE OF ACTION IS PERMANENTLY BARRED.</p>
+
+  <h2>43. Headings</h2>
+  <p>Section headings in these Terms are for convenience only and have no legal or contractual effect. They shall not be used to interpret or construe the meaning of any provision of these Terms.</p>
+
+  <h2>44. Counterparts</h2>
+  <p>These Terms may not be signed in counterparts. They are accepted electronically by your use of the Service, and no physical signature or document is required to make them binding.</p>
+
+  <h2>45. Language</h2>
+  <p>These Terms are written in English. Any translation is provided for convenience only. In the event of any inconsistency between the English version and a translation, the English version shall prevail.</p>
+
+  <h2>46. Survival</h2>
+  <p>The following sections shall survive termination of your access to the Service and these Terms: Sections 8 (Payment and Billing), 9 (Refund Policy), 13 (Intellectual Property), 15 (Disclaimers), 16 (Limitation of Liability), 17 (Indemnification), 25 (Governing Law), 26 (Dispute Resolution), 42 (Statute of Limitations), and any other provisions that by their nature should survive termination.</p>
+
+  <h2>47. Relationship of Parties</h2>
+  <p>The relationship between you and SwarmBrowser is that of independent contractors. These Terms do not create any partnership, joint venture, employment, franchise, or agency relationship between the parties. Neither party has the authority to bind the other or to incur any obligation on behalf of the other.</p>
+
+  <h2>48. Specific Performance</h2>
+  <p>The parties agree that money damages may not be an adequate remedy for breach of certain provisions of these Terms, including provisions relating to intellectual property or confidentiality. Either party may seek specific performance, injunctive relief, or other equitable remedies without waiving any other rights or remedies under these Terms or applicable law.</p>
+
+  <h2>49. Consumer Protection</h2>
+  <p>Some jurisdictions provide additional consumer protections that may apply to your use of the Service. Nothing in these Terms is intended to limit or waive any rights you may have under mandatory consumer protection laws applicable in your jurisdiction to the extent such rights cannot be waived by contract.</p>
+
+  <h2>50. Amendments and Updates</h2>
+  <p>SwarmBrowser reserves the right to amend these Terms at any time by posting updated Terms on the website. The updated Terms will be identified by a new "Last updated" date. Continued use of the Service after any amendment constitutes acceptance of the amended Terms.</p>
+  <p>If we make material changes to these Terms, we will make reasonable efforts to notify users by posting a prominent notice on the website for at least 30 days prior to the effective date of the change. For changes required by law, updates may take effect immediately.</p>
+  <p>You should review these Terms periodically. We recommend bookmarking this page. By using the Service, you acknowledge your responsibility to stay informed of the current Terms.</p>
+
+  <p style="margin-top:40px;color:var(--text-secondary);font-size:0.875rem;">These Terms of Service were last updated on April 12, 2026.</p>
 </div>
+
 <footer>
-  <a href="index.html">Back to SwarmBrowser</a>
+  &copy; 2026 SwarmBrowser &middot; <a href="/" style="color:#94a3b8">Home</a> &middot; <a href="/docs.html" style="color:#94a3b8">Docs</a>
 </footer>
+
 </body>
 </html>

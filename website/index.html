@@ -1,399 +1,563 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SwarmBrowser — Headless Browser API from Anywhere</title>
-  <meta name="description" content="Render, screenshot, scrape, and generate PDFs from 4 continents. See how your site looks from Singapore, Frankfurt, Canada, or the UK." />
-  <meta name="keywords" content="headless browser API, screenshot API, web scraping API, PDF generation API, headless Chrome, browser rendering, multi-region rendering, browserless alternative">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwarmBrowser — Render the Web From Everywhere</title>
+  <meta name="description" content="Screenshot, scrape, and generate PDFs from 8 locations worldwide. See what your users see. Free tier: 100 pages/day. No account needed.">
+  <meta name="keywords" content="headless browser API, screenshot API, web scraping API, PDF generation, geographic comparison, multi-region rendering, browserless alternative, puppeteer API">
   <link rel="canonical" href="https://swarmbrowser.net/">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F310;</text></svg>">
-  <!-- Open Graph -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230891b2'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='16' cy='8' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='24' cy='8' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='8' cy='16' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23fff'/%3E%3Ccircle cx='24' cy='16' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='8' cy='24' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='16' cy='24' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='24' cy='24' r='2' fill='%23fff' opacity='.9'/%3E%3C/svg%3E">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://swarmbrowser.net/">
-  <meta property="og:title" content="SwarmBrowser — Headless Browser API from Anywhere">
-  <meta property="og:description" content="Screenshot, scrape, and render web pages from 4 continents. Free tier: 100 pages/day. Pay with card or USDC.">
-  <meta property="og:image" content="https://swarmbrowser.net/og-image.png">
-  <!-- Twitter Card -->
+  <meta property="og:title" content="SwarmBrowser — Render the Web From Everywhere">
+  <meta property="og:description" content="Screenshot, scrape, and generate PDFs from 8 locations worldwide. See what your users see.">
+  <meta property="og:site_name" content="SwarmBrowser">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="SwarmBrowser — Headless Browser API from Anywhere">
-  <meta name="twitter:description" content="Screenshot, scrape, and render web pages from 4 continents. Free tier: 100 pages/day. Pay with card or USDC.">
-  <meta name="twitter:image" content="https://swarmbrowser.net/og-image.png">
-  <!-- JSON-LD -->
+  <meta name="twitter:title" content="SwarmBrowser — Render the Web From Everywhere">
+  <meta name="twitter:description" content="Headless browser API from 8 locations. Screenshot, scrape, PDF. Free tier available.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #0891b2;
+      --teal-dim: #0e7490;
+      --teal-light: #ecfeff;
+      --teal-glow: rgba(8, 145, 178, 0.07);
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --border: #e2e8f0;
+      --green: #10b981;
+      --radius: 10px;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+    /* Nav */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    nav .inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; }
+    .logo svg { width: 32px; height: 32px; }
+    .nav-links { display: flex; align-items: center; gap: 32px; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+    .nav-links a:hover { color: var(--text); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 22px; border-radius: var(--radius); font-weight: 600; font-size: 0.9rem; transition: all 0.2s; cursor: pointer; border: none; }
+    .btn-primary { background: var(--teal); color: #fff; }
+    .btn-primary:hover { background: var(--teal-dim); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(8, 145, 178, 0.3); }
+    .btn-outline { border: 1.5px solid var(--border); color: var(--text-secondary); background: transparent; }
+    .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+
+    /* Hero */
+    .hero { padding: 80px 0 24px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 40%, var(--teal-glow) 0%, transparent 55%); pointer-events: none; }
+    .hero h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; position: relative; color: var(--text); }
+    .hero h1 .accent { color: var(--teal); }
+    .hero p { font-size: 1.15rem; color: var(--text-secondary); max-width: 560px; margin: 0 auto 36px; }
+
+    /* Keygen box */
+    .keygen-box { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 14px; padding: 32px; max-width: 540px; margin: 36px auto 0; }
+    .keygen-box .kgtitle { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+    .keygen-box .kgsub { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; }
+
+    /* Stats */
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 24px 0 60px; }
+    .stat { background: var(--bg); padding: 24px; text-align: center; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text); }
+    .stat-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Sections */
+    .section { padding: 80px 0; }
+    .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.5px; }
+    .section-sub { color: var(--text-secondary); margin-bottom: 48px; font-size: 1.05rem; }
+
+    /* Features grid */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .feature-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 28px; transition: all 0.2s; }
+    .feature-card:hover { border-color: var(--teal); box-shadow: 0 4px 20px rgba(8, 145, 178, 0.1); transform: translateY(-2px); }
+    .feature-card.highlight { border-color: var(--teal); background: var(--teal-light); }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 14px; }
+    .feature-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 8px; }
+    .feature-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; }
+    .feature-tag { display: inline-block; background: var(--teal); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; margin-top: 10px; letter-spacing: 0.3px; }
+
+    /* Regions */
+    .regions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .region-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
+    .region-card:hover { border-color: var(--teal); transform: translateY(-2px); }
+    .region-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .region-name { font-weight: 600; font-size: 0.9rem; }
+    .region-sub { font-size: 0.75rem; color: var(--text-secondary); }
+
+    /* Pricing */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .price-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 36px 32px; position: relative; }
+    .price-card.featured { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal), 0 8px 30px rgba(8, 145, 178, 0.1); }
+    .price-card.featured::before { content: 'Most popular'; position: absolute; top: -12px; left: 32px; background: var(--teal); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+    .price-name { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+    .price-amount { font-size: 2.5rem; font-weight: 800; margin-bottom: 4px; }
+    .price-amount .period { font-size: 1rem; font-weight: 400; color: var(--text-secondary); }
+    .price-desc { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 24px; }
+    .price-features { list-style: none; margin-bottom: 28px; }
+    .price-features li { padding: 8px 0; font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px; }
+    .price-features li::before { content: ''; width: 18px; height: 18px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%230891b2'%3E%3Cpath d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'/%3E%3C/svg%3E") no-repeat center; flex-shrink: 0; }
+
+    /* Code block */
+    .code-block { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 24px 28px; font-size: 0.82rem; position: relative; color: #e2e8f0; overflow-x: auto; }
+    .code-block .comment { color: #64748b; }
+    .code-block .str { color: #86efac; }
+    .code-block .kw { color: #7dd3fc; }
+    .code-block .key { color: #f0abfc; }
+    .copy-btn { position: absolute; top: 12px; right: 12px; background: rgba(148,163,184,0.1); border: 1px solid #334155; color: #94a3b8; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
+    .copy-btn:hover { background: rgba(148,163,184,0.2); color: #e2e8f0; }
+
+    /* How it works */
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+    .step-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+    .step-num { font-size: 1.5rem; font-weight: 700; color: var(--teal); margin-bottom: 8px; }
+    .step-title { font-weight: 600; margin-bottom: 8px; }
+    .step-desc { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* Diff section */
+    .diff-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+    .diff-panel { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+    .diff-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 8px; }
+    .diff-metric { font-size: 1.5rem; font-weight: 700; }
+    .diff-metric.fast { color: var(--green); }
+    .diff-metric.slow { color: #f59e0b; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 40px 0; margin-top: 80px; }
+    footer .inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    footer .links { display: flex; gap: 24px; font-size: 0.85rem; color: var(--text-secondary); }
+    footer .links a:hover { color: var(--text); }
+    footer .copy { font-size: 0.8rem; color: #94a3b8; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .hero { padding: 60px 0 40px; }
+      .diff-demo { grid-template-columns: 1fr; }
+    }
+  </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "SwarmBrowser",
-    "description": "Headless browser API from 4 continents. Screenshot, scrape, render, and generate PDFs from Canada, Singapore, Frankfurt, and the UK.",
+    "description": "Headless browser API — screenshot, PDF, scrape, and batch render from 8 locations worldwide.",
     "url": "https://swarmbrowser.net",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
     "offers": [
-      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "description": "100 pages/day, 1 location" },
-      { "@type": "Offer", "name": "Pro", "price": "20", "priceCurrency": "USD", "description": "10,000 pages/day, all 4 locations" },
-      { "@type": "Offer", "name": "Business", "price": "100", "priceCurrency": "USD", "description": "100,000 pages/day, all 4 locations" }
+      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "description": "100 pages/day, 1 region" },
+      { "@type": "Offer", "name": "Pro", "price": "19.37", "priceCurrency": "USD", "description": "10,000 pages/day, all regions" },
+      { "@type": "Offer", "name": "Business", "price": "97.53", "priceCurrency": "USD", "description": "100,000 pages/day, all regions" }
     ]
   }
   </script>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #ffffff; --fg: #111827; --muted: #6b7280; --accent: #059669;
-      --accent-light: #d1fae5; --border: #e5e7eb; --card-bg: #f9fafb;
-      --green: #10b981; --red: #ef4444;
-      --radius: 12px; --max-w: 1100px;
-    }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--fg); background: var(--bg); line-height: 1.6; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    nav { display: flex; justify-content: space-between; align-items: center; max-width: var(--max-w); margin: 0 auto; padding: 1.5rem 2rem; }
-    nav .logo { font-size: 1.4rem; font-weight: 700; color: var(--fg); }
-    nav .links { display: flex; gap: 2rem; align-items: center; }
-    nav .links a { color: var(--muted); font-size: 0.95rem; }
-    .btn { display: inline-block; padding: 0.65rem 1.5rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer; transition: all 0.2s; }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: #047857; text-decoration: none; }
-    .btn-outline { border: 2px solid var(--border); color: var(--fg); background: transparent; }
-
-    .hero { text-align: center; padding: 5rem 2rem 4rem; max-width: 800px; margin: 0 auto; }
-    .hero h1 { font-size: 3rem; font-weight: 800; line-height: 1.15; margin-bottom: 1.5rem; }
-    .hero h1 span { color: var(--accent); }
-    .hero p { font-size: 1.25rem; color: var(--muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-
-    .use-cases { display: flex; justify-content: center; gap: 1rem; padding: 2rem; flex-wrap: wrap; }
-    .use-case-tag { padding: 0.5rem 1.2rem; background: var(--accent-light); color: var(--accent); border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
-
-    .features { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
-    .features h2 { text-align: center; font-size: 2rem; margin-bottom: 3rem; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-    .feature-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
-    .feature-card h3 { font-size: 1.15rem; margin-bottom: 0.75rem; }
-    .feature-card p { color: var(--muted); font-size: 0.95rem; }
-
-    .how-it-works { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
-    .how-it-works h2 { text-align: center; font-size: 2rem; margin-bottom: 3rem; }
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
-    .step { text-align: center; padding: 1.5rem; }
-    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; background: var(--accent-light); color: var(--accent); font-weight: 700; font-size: 1.2rem; margin-bottom: 1rem; }
-    .step h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .step p { color: var(--muted); font-size: 0.9rem; }
-
-    .pricing { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
-    .pricing h2 { text-align: center; font-size: 2rem; margin-bottom: 0.5rem; }
-    .pricing .subtitle { text-align: center; color: var(--muted); margin-bottom: 3rem; }
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-    .price-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 2.5rem 2rem; text-align: center; }
-    .price-card.featured { border-color: var(--accent); position: relative; }
-    .price-card.featured::before { content: 'Most Popular'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #fff; padding: 0.2rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-    .price-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-    .price-card .price { font-size: 2.5rem; font-weight: 800; margin: 1rem 0 0.25rem; }
-    .price-card .price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
-    .price-card .price-note { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
-    .price-card ul { list-style: none; text-align: left; margin-bottom: 2rem; }
-    .price-card ul li { padding: 0.4rem 0; font-size: 0.95rem; color: var(--muted); }
-    .price-card ul li::before { content: '\2713'; color: var(--green); font-weight: 700; margin-right: 0.5rem; }
-
-    .api-example { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
-    .api-example h2 { text-align: center; font-size: 2rem; margin-bottom: 2rem; }
-    .code-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
-    .code-tab { padding: 0.5rem 1rem; border-radius: 8px 8px 0 0; cursor: pointer; font-size: 0.9rem; font-weight: 600; background: #e5e7eb; color: var(--muted); border: none; }
-    .code-tab.active { background: #1f2937; color: #e5e7eb; }
-    .code-block { background: #1f2937; color: #e5e7eb; border-radius: 0 var(--radius) var(--radius) var(--radius); padding: 2rem; overflow-x: auto; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.7; }
-    .code-block .comment { color: #6b7280; }
-    .code-block .string { color: #34d399; }
-    .code-panel { display: none; }
-    .code-panel.active { display: block; }
-
-    .comparison { max-width: var(--max-w); margin: 0 auto; padding: 4rem 2rem; }
-    .comparison h2 { text-align: center; font-size: 2rem; margin-bottom: 2rem; }
-    .comparison table { width: 100%; border-collapse: collapse; }
-    .comparison th, .comparison td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
-    .comparison th { font-weight: 600; background: var(--card-bg); }
-    .highlight-row { background: var(--accent-light); }
-
-    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--muted); font-size: 0.85rem; }
-
-    @media (max-width: 640px) { .hero h1 { font-size: 2rem; } nav .links { gap: 1rem; } }
-  </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">SwarmBrowser</div>
-  <div class="links">
-    <a href="#features">Features</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#api">API</a>
-    <a href="#pricing" class="btn btn-primary">Get Started</a>
-  </div>
-</nav>
+  <nav>
+    <div class="container inner">
+      <a href="/" class="logo">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#0891b2"/>
+          <circle cx="8" cy="8" r="2" fill="white" opacity="0.9"/>
+          <circle cx="16" cy="8" r="2" fill="white" opacity="0.9"/>
+          <circle cx="24" cy="8" r="2" fill="white" opacity="0.9"/>
+          <circle cx="8" cy="16" r="2" fill="white" opacity="0.9"/>
+          <circle cx="16" cy="16" r="2.5" fill="white"/>
+          <circle cx="24" cy="16" r="2" fill="white" opacity="0.9"/>
+          <circle cx="8" cy="24" r="2" fill="white" opacity="0.9"/>
+          <circle cx="16" cy="24" r="2" fill="white" opacity="0.9"/>
+          <circle cx="24" cy="24" r="2" fill="white" opacity="0.9"/>
+        </svg>
+        <span>Swarm<span style="color:var(--teal)">Browser</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#regions">Regions</a>
+        <a href="#pricing">Pricing</a>
+        <a href="/docs.html">Docs</a>
+        <a href="/account.html">Account</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+      <a href="#top" class="btn btn-primary">Get Free Key</a>
+    </div>
+  </nav>
 
-<section class="hero">
-  <h1>Headless browsing from <span>anywhere</span></h1>
-  <p>Screenshot, scrape, and render web pages from 4 continents. See how your site loads in Asia, Europe, and North America. API-first. Pay with card or USDC.</p>
-  <div class="hero-btns">
-    <a href="#pricing" class="btn btn-primary">Start Free — 100 pages/day</a>
-    <a href="#api" class="btn btn-outline">API Documentation</a>
-  </div>
-</section>
+  <main>
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="container">
+        <h1>Render the web<br>from <span class="accent">everywhere</span></h1>
+        <p>Screenshot, scrape, and generate PDFs from 8 locations worldwide. See what your users actually see — geo-blocks, CDN differences, A/B test leaks.</p>
 
-<div class="use-cases">
-  <div class="use-case-tag">Screenshots</div>
-  <div class="use-case-tag">PDF Generation</div>
-  <div class="use-case-tag">Web Scraping</div>
-  <div class="use-case-tag">SEO Auditing</div>
-  <div class="use-case-tag">Performance Testing</div>
-  <div class="use-case-tag">Compliance</div>
-</div>
+        <div class="keygen-box">
+          <div class="kgtitle">Try free — no account needed</div>
+          <div class="kgsub">100 pages/day. No email. Your key is your identity.</div>
+          <button class="btn btn-primary" id="gen-btn" onclick="generateKey()" style="width:100%;padding:14px;font-size:1rem;">Generate my free key</button>
+          <div id="key-display" style="display:none;background:#0f172a;border-radius:8px;padding:16px;margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:0.95rem;color:#22d3ee;word-break:break-all;text-align:center;position:relative;">
+            <span id="key-text"></span>
+            <svg id="copy-key-icon" onclick="copyKey()" style="position:absolute;top:50%;right:12px;transform:translateY(-50%);cursor:pointer;opacity:0.5;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </div>
+          <div id="key-warning" style="display:none;color:#d97706;font-size:0.85rem;margin-top:10px;font-weight:500;text-align:center;">Save this key now. It will not be shown again.</div>
+          <div id="key-usage" style="display:none;margin-top:16px;background:#0f172a;border-radius:8px;padding:16px;text-align:left;font-size:0.75rem;color:#e2e8f0;overflow-x:auto;position:relative;">
+            <div style="color:#64748b;margin-bottom:8px;font-size:0.8rem;">Take your first screenshot:</div>
+            <svg id="copy-icon" onclick="copySnippet()" style="position:absolute;top:12px;right:12px;cursor:pointer;opacity:0.5;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <pre style="margin:0;background:none;padding:0;border:none;font-size:0.73rem;color:#e2e8f0;white-space:pre-wrap;word-break:break-all;padding-right:30px;" id="snippet-text"></pre>
+          </div>
+        </div>
 
-<section class="features" id="features">
-  <h2>Why SwarmBrowser?</h2>
-  <div class="features-grid">
-    <div class="feature-card">
-      <h3>Render from Any Continent</h3>
-      <p>Choose where the page loads: Canada, Frankfurt, Singapore, or the UK. Test how your CDN performs from Asia vs Europe.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Full Browser Rendering</h3>
-      <p>Headless Chromium renders JavaScript, CSS animations, web fonts — everything. Get the real page, not a simplified version.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Screenshot + PDF + Scrape</h3>
-      <p>One API, three outputs. Take screenshots, generate PDFs, or extract structured data with CSS selectors.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Batch Processing</h3>
-      <p>Submit up to 100 URLs at once. Process in parallel across all nodes. Get results fast.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Performance Metrics</h3>
-      <p>Every request returns load time, DOM content loaded, first paint, resource count, and total bytes — from the actual render location.</p>
-    </div>
-    <div class="feature-card">
-      <h3>Pay by Card or USDC</h3>
-      <p>Visa, Mastercard, and USDC accepted. No crypto wallet needed. Free tier with 100 pages/day to get started.</p>
-    </div>
-  </div>
-</section>
+        <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="#features" class="btn btn-outline">See features</a>
+          <a href="/docs.html" class="btn btn-outline">View docs</a>
+        </div>
+      </div>
+    </section>
 
-<section class="how-it-works">
-  <h2>How It Works</h2>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Send a URL</h3>
-      <p>POST to our API with the URL and desired output (screenshot, PDF, or scrape).</p>
+    <!-- Stats -->
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><div class="stat-value">8</div><div class="stat-label">Global regions</div></div>
+        <div class="stat"><div class="stat-value">100K</div><div class="stat-label">Pages/day max</div></div>
+        <div class="stat"><div class="stat-value">4</div><div class="stat-label">Actions: screenshot, PDF, scrape, batch</div></div>
+        <div class="stat"><div class="stat-value">$0</div><div class="stat-label">To start</div></div>
+      </div>
     </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>We Render It</h3>
-      <p>Headless Chrome on our k3s cluster loads the page from your chosen location.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>Get Results</h3>
-      <p>Receive your screenshot, PDF, extracted data, or performance metrics in seconds.</p>
-    </div>
-  </div>
-</section>
 
-<section class="pricing" id="pricing">
-  <h2>Simple Pricing</h2>
-  <p class="subtitle">Pay with Visa, Mastercard, or USDC. Free tier included.</p>
-  <div class="pricing-grid">
-    <div class="price-card">
-      <h3>Free</h3>
-      <div class="price">$0 <span>/mo</span></div>
-      <p class="price-note">Get started instantly</p>
-      <ul>
-        <li>100 pages/day</li>
-        <li>1 location</li>
-        <li>Screenshot + PDF + Scrape</li>
-        <li>Performance metrics</li>
-      </ul>
-      <a href="#" class="btn btn-outline" style="width:100%">Get API Key</a>
+    <!-- Features -->
+    <section id="features" class="section">
+      <div class="container">
+        <h2 class="section-title">Everything headless browsers should do</h2>
+        <p class="section-sub">Seven capabilities in one API. The last two are things nobody else does.</p>
+        <div class="features-grid">
+
+          <div class="feature-card">
+            <div class="feature-icon">📸</div>
+            <div class="feature-title">Screenshot API</div>
+            <div class="feature-desc">Capture any URL as PNG or JPEG. Choose resolution, viewport, full-page or above-the-fold. JavaScript rendered. Works on SPAs, dashboards, and dynamic content.</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <div class="feature-title">PDF Generation</div>
+            <div class="feature-desc">Convert any web page to a production-ready PDF. A4 or Letter, landscape or portrait, configurable margins, background graphics preserved.</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-title">Web Scraping</div>
+            <div class="feature-desc">Extract structured data from JavaScript-rendered pages. CSS selector targeting, wait-for-element support, full DOM access. Get title, meta, links, headings, custom fields.</div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Batch Processing</div>
+            <div class="feature-desc">Submit 1,000–10,000 URLs in a single call. Rendered in parallel across the swarm. Poll for results or receive a webhook. 10,000 pages in minutes, not hours.</div>
+          </div>
+
+          <div class="feature-card highlight">
+            <div class="feature-icon">🌍</div>
+            <div class="feature-title">Geographic Comparison</div>
+            <div class="feature-desc">Render the same URL from all 8 regions simultaneously. Get load time per region, screenshot per region, and a side-by-side diff. See what Singapore sees vs. what Frankfurt sees.</div>
+            <span class="feature-tag">Key differentiator</span>
+          </div>
+
+          <div class="feature-card highlight">
+            <div class="feature-icon">🔎</div>
+            <div class="feature-title">Diff Detection</div>
+            <div class="feature-desc">Pixel-by-pixel comparison across regions. Highlights geo-blocked content, CDN staleness, A/B test leaks, and localization bugs. Get a diff image showing exactly what changed.</div>
+            <span class="feature-tag">Key differentiator</span>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">⛓️</div>
+            <div class="feature-title">dApp Rendering</div>
+            <div class="feature-desc">Screenshot Web3 pages and DeFi dashboards with injected wallet state. Competitors don't understand Web3. We do. Capture token prices, LP positions, live on-chain data.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Geographic diff demo -->
+    <section class="section" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+      <div class="container">
+        <h2 class="section-title">Spot what's different across regions</h2>
+        <p class="section-sub">The same URL rendered from 4 different regions — different load times, different content. A/B test leaks, geo-restrictions, CDN staleness: all visible instantly.</p>
+
+        <div class="diff-demo">
+          <div class="diff-panel">
+            <div class="diff-label">Montreal (Canada)</div>
+            <div class="diff-metric fast">312ms</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:6px;">Full content rendered. Pricing in USD.</div>
+          </div>
+          <div class="diff-panel">
+            <div class="diff-label">Frankfurt (Germany)</div>
+            <div class="diff-metric fast">287ms</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:6px;">GDPR cookie banner shown. Pricing in EUR.</div>
+          </div>
+          <div class="diff-panel">
+            <div class="diff-label">Singapore</div>
+            <div class="diff-metric slow">891ms</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:6px;">Feature blocked. Different hero image shown.</div>
+          </div>
+          <div class="diff-panel">
+            <div class="diff-label">Sydney (Australia)</div>
+            <div class="diff-metric fast">445ms</div>
+            <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:6px;">A/B variant B showing. CTA text different.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;" class="code-block">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          <span class="comment"># One call. 8 regions. Parallel.</span><br>
+          curl -X POST https://api.swarmbrowser.net/v1/compare \<br>
+          &nbsp;&nbsp;-H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \<br>
+          &nbsp;&nbsp;-H <span class="str">"Content-Type: application/json"</span> \<br>
+          &nbsp;&nbsp;-d <span class="str">'{"url":"https://example.com","regions":["montreal","frankfurt","singapore","sydney"]}'</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Regions -->
+    <section id="regions" class="section">
+      <div class="container">
+        <h2 class="section-title">8 global rendering nodes</h2>
+        <p class="section-sub">One API key. Every region. Specify one or compare all.</p>
+        <div class="regions-grid">
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">Montreal</div><div class="region-sub">North America East</div></div></div>
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">Frankfurt</div><div class="region-sub">Europe Central</div></div></div>
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">London</div><div class="region-sub">Europe West</div></div></div>
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">Warsaw</div><div class="region-sub">Europe East</div></div></div>
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">Singapore</div><div class="region-sub">Southeast Asia</div></div></div>
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">Jakarta</div><div class="region-sub">Southeast Asia</div></div></div>
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">Kuala Lumpur</div><div class="region-sub">Southeast Asia</div></div></div>
+          <div class="region-card"><div class="region-dot"></div><div><div class="region-name">Sydney</div><div class="region-sub">Oceania</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Code example -->
+    <section class="section" style="background:var(--bg-alt);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+      <div class="container">
+        <h2 class="section-title">Simple, predictable API</h2>
+        <p class="section-sub">One endpoint per action. Returns binary for screenshots and PDFs, JSON for scraping.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+          <div>
+            <h3 style="margin-bottom:12px;font-size:1rem;font-weight:600;">Screenshot</h3>
+            <div class="code-block" style="font-size:0.78rem;">
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              curl -X POST https://api.swarmbrowser.net/<span class="kw">v1/screenshot</span> \<br>
+              &nbsp;-H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \<br>
+              &nbsp;-d <span class="str">'{"url":"https://example.com",</span><br>
+              &nbsp;&nbsp;&nbsp;<span class="str">"region":"frankfurt",</span><br>
+              &nbsp;&nbsp;&nbsp;<span class="str">"format":"png",</span><br>
+              &nbsp;&nbsp;&nbsp;<span class="str">"fullPage":true}'</span> \<br>
+              &nbsp;--output screenshot.png
+            </div>
+          </div>
+          <div>
+            <h3 style="margin-bottom:12px;font-size:1rem;font-weight:600;">Scrape</h3>
+            <div class="code-block" style="font-size:0.78rem;">
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+              curl -X POST https://api.swarmbrowser.net/<span class="kw">v1/scrape</span> \<br>
+              &nbsp;-H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \<br>
+              &nbsp;-d <span class="str">'{"url":"https://example.com",</span><br>
+              &nbsp;&nbsp;&nbsp;<span class="str">"extract":["title","meta","text"],</span><br>
+              &nbsp;&nbsp;&nbsp;<span class="str">"selectors":{"price":".price",</span><br>
+              &nbsp;&nbsp;&nbsp;<span class="str">"stock":".availability"}}'</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="margin-bottom:12px;font-size:1rem;font-weight:600;">Batch — 10,000 URLs, fire and forget</h3>
+          <div class="code-block" style="font-size:0.78rem;">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <span class="comment"># Submit batch</span><br>
+            curl -X POST https://api.swarmbrowser.net/<span class="kw">v1/batch</span> \<br>
+            &nbsp;-H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \<br>
+            &nbsp;-d <span class="str">'{"urls":["https://a.com","https://b.com",...10000 more],"action":"screenshot"}'</span><br>
+            <br>
+            <span class="comment"># Poll or receive webhook when done</span><br>
+            curl https://api.swarmbrowser.net/<span class="kw">v1/batch/bch_abc123</span> \<br>
+            &nbsp;-H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section">
+      <div class="container">
+        <h2 class="section-title">Simple pricing</h2>
+        <p class="section-sub">Start free. Pay with USDC or USDT when you need more. $19.37/mo vs $40–49/mo competitors.</p>
+        <div class="pricing-grid">
+          <div class="price-card">
+            <div class="price-name">Free</div>
+            <div class="price-amount">$0</div>
+            <div class="price-desc">For testing and prototyping</div>
+            <ul class="price-features">
+              <li>100 pages per day</li>
+              <li>1 region per call</li>
+              <li>Screenshot, PDF, scrape</li>
+              <li>No account required</li>
+              <li>Hard limit — upgrade when ready</li>
+            </ul>
+            <a href="#top" class="btn btn-outline" style="width:100%">Get Free Key</a>
+          </div>
+          <div class="price-card featured">
+            <div class="price-name">Pro</div>
+            <div class="price-amount">$19.37 <span class="period">/ month</span></div>
+            <div class="price-desc">For production teams</div>
+            <ul class="price-features">
+              <li>10,000 pages per day</li>
+              <li>All 8 regions</li>
+              <li>Geographic comparison + diff</li>
+              <li>Batch up to 10,000 URLs</li>
+              <li>Overflow: $0.50 per 1,000 extra</li>
+              <li>USDC or USDT — no card needed</li>
+            </ul>
+            <a href="#top" class="btn btn-primary" style="width:100%">Get your key first</a>
+          </div>
+          <div class="price-card">
+            <div class="price-name">Business</div>
+            <div class="price-amount">$97.53 <span class="period">/ month</span></div>
+            <div class="price-desc">For high-volume pipelines</div>
+            <ul class="price-features">
+              <li>100,000 pages per day</li>
+              <li>All 8 regions</li>
+              <li>Batch up to 100,000 URLs</li>
+              <li>Priority queue</li>
+              <li>Overflow: $0.50 per 1,000 extra</li>
+              <li>USDC or USDT</li>
+            </ul>
+            <a href="#top" class="btn btn-outline" style="width:100%">Get your key first</a>
+          </div>
+        </div>
+        <p style="text-align:center;color:var(--text-secondary);font-size:0.85rem;margin-top:20px;">Pricing applies 50% off vs leading competitors. Funds stay in your wallet — we pull monthly via approved allowance.</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Get a key in seconds. Scale when you're ready. Cancel by revoking your wallet approval — no form, no email.</p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div class="step-title">Generate a free key</div>
+            <div class="step-desc">Click the button above. Your key is generated instantly. No email, no sign-up. The key is your identity.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div class="step-title">Call the API</div>
+            <div class="step-desc">POST to any endpoint with your key in the Authorization header. Get screenshots, PDFs, or scraped data back immediately.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div class="step-title">Upgrade when ready</div>
+            <div class="step-desc">Go to your <a href="/account.html" style="color:var(--teal)">account page</a> with your key. Connect a wallet, approve a USDC budget. Upgrade takes 30 seconds.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div class="step-title">Cancel anytime</div>
+            <div class="step-desc">Revoke the USDC approval in your wallet. That's it. Key reverts to free tier. No penalty, no form, no email.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container inner">
+      <div class="links">
+        <a href="/docs.html">Documentation</a>
+        <a href="/account.html">Account</a>
+        <a href="/terms.html">Terms of Service</a>
+      </div>
+      <div class="copy">&copy; 2026 SwarmBrowser</div>
     </div>
-    <div class="price-card featured">
-      <h3>Pro</h3>
-      <div class="price">$20 <span>/mo</span></div>
-      <p class="price-note">For production use</p>
-      <ul>
-        <li>10,000 pages/day</li>
-        <li>All 4 locations</li>
-        <li>Screenshot + PDF + Scrape</li>
-        <li>Batch processing (100 URLs)</li>
-        <li>Performance metrics</li>
-        <li>Priority rendering</li>
-      </ul>
-      <a href="#" class="btn btn-primary" style="width:100%">Start Pro</a>
-    </div>
-    <div class="price-card">
-      <h3>Business</h3>
-      <div class="price">$100 <span>/mo</span></div>
-      <p class="price-note">High volume</p>
-      <ul>
-        <li>100,000 pages/day</li>
-        <li>All 4 locations</li>
-        <li>All features</li>
-        <li>Batch processing (100 URLs)</li>
-        <li>Custom user agents</li>
-        <li>Resource blocking</li>
-        <li>Priority support</li>
-      </ul>
-      <a href="#" class="btn btn-outline" style="width:100%">Contact Us</a>
-    </div>
-  </div>
-  <p style="text-align:center; color:var(--muted); font-size:0.85rem; margin-top:2rem;">Visa and Mastercard accepted &mdash; no crypto wallet needed.</p>
-</section>
+  </footer>
 
-<section class="api-example" id="api">
-  <h2>API Examples</h2>
+  <script>
+    var API_URL = 'https://api.swarmbrowser.net';
 
-  <div class="code-tabs">
-    <button class="code-tab active" onclick="showTab('screenshot')">Screenshot</button>
-    <button class="code-tab" onclick="showTab('pdf')">PDF</button>
-    <button class="code-tab" onclick="showTab('scrape')">Scrape</button>
-    <button class="code-tab" onclick="showTab('batch')">Batch</button>
-  </div>
-
-  <div class="code-panel active" id="tab-screenshot">
-    <div class="code-block">
-<span class="comment"># Take a screenshot from Singapore</span>
-curl -X POST https://api.swarmbrowser.example.com/v1/screenshot \
-  -H <span class="string">'Content-Type: application/json'</span> \
-  -H <span class="string">'X-API-Key: your-key'</span> \
-  -d <span class="string">'{
-    "url": "https://example.com",
-    "width": 1280,
-    "height": 720,
-    "format": "png",
-    "fullPage": true
-  }'</span> --output screenshot.png
-
-<span class="comment"># Response headers include:</span>
-<span class="comment"># X-Load-Time: 1234</span>
-<span class="comment"># X-Location: k3s-sg</span>
-<span class="comment"># X-Resource-Count: 42</span>
-    </div>
-  </div>
-
-  <div class="code-panel" id="tab-pdf">
-    <div class="code-block">
-<span class="comment"># Generate PDF</span>
-curl -X POST https://api.swarmbrowser.example.com/v1/pdf \
-  -H <span class="string">'Content-Type: application/json'</span> \
-  -H <span class="string">'X-API-Key: your-key'</span> \
-  -d <span class="string">'{
-    "url": "https://example.com/invoice",
-    "format": "A4",
-    "landscape": false,
-    "printBackground": true
-  }'</span> --output page.pdf
-    </div>
-  </div>
-
-  <div class="code-panel" id="tab-scrape">
-    <div class="code-block">
-<span class="comment"># Scrape page content</span>
-curl -X POST https://api.swarmbrowser.example.com/v1/scrape \
-  -H <span class="string">'Content-Type: application/json'</span> \
-  -H <span class="string">'X-API-Key: your-key'</span> \
-  -d <span class="string">'{
-    "url": "https://example.com",
-    "extract": ["title", "meta", "links", "headings"],
-    "selectors": {
-      "price": ".product-price",
-      "name": "h1.product-title"
+    function copyKey() {
+      var key = document.getElementById('key-text').textContent;
+      navigator.clipboard.writeText(key);
+      var icon = document.getElementById('copy-key-icon');
+      icon.style.opacity = '1';
+      setTimeout(function() { icon.style.opacity = '0.5'; }, 1500);
     }
-  }'</span>
 
-<span class="comment"># Response</span>
-{
-  <span class="string">"content"</span>: {
-    <span class="string">"title"</span>: <span class="string">"Example Product"</span>,
-    <span class="string">"headings"</span>: [{ <span class="string">"level"</span>: 1, <span class="string">"text"</span>: <span class="string">"..."</span> }]
-  },
-  <span class="string">"selectors"</span>: {
-    <span class="string">"price"</span>: <span class="string">"$29.99"</span>,
-    <span class="string">"name"</span>: <span class="string">"Example Product"</span>
-  },
-  <span class="string">"metrics"</span>: { <span class="string">"loadTime"</span>: 1234 }
-}
-    </div>
-  </div>
-
-  <div class="code-panel" id="tab-batch">
-    <div class="code-block">
-<span class="comment"># Batch scrape 10 URLs</span>
-curl -X POST https://api.swarmbrowser.example.com/v1/batch \
-  -H <span class="string">'Content-Type: application/json'</span> \
-  -H <span class="string">'X-API-Key: your-key'</span> \
-  -d <span class="string">'{
-    "urls": [
-      "https://example.com/page1",
-      "https://example.com/page2",
-      "https://example.com/page3"
-    ],
-    "action": "scrape",
-    "options": {
-      "extract": ["title", "text"]
+    function copySnippet() {
+      var text = document.getElementById('snippet-text').textContent;
+      navigator.clipboard.writeText(text);
+      var icon = document.getElementById('copy-icon');
+      icon.style.opacity = '1';
+      setTimeout(function() { icon.style.opacity = '0.5'; }, 1500);
     }
-  }'</span>
 
-<span class="comment"># Response</span>
-{
-  <span class="string">"total"</span>: 3,
-  <span class="string">"completed"</span>: 3,
-  <span class="string">"failed"</span>: 0,
-  <span class="string">"results"</span>: [...]
-}
-    </div>
-  </div>
-</section>
+    function copyCode(btn) {
+      var block = btn.parentElement;
+      var text = block.innerText.replace('Copy\n', '').replace('Copy', '');
+      navigator.clipboard.writeText(text.trim());
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+    }
 
-<section class="comparison">
-  <h2>How We Compare</h2>
-  <table>
-    <thead>
-      <tr><th>Feature</th><th>SwarmBrowser</th><th>Browserless</th><th>ScrapingBee</th><th>Apify</th></tr>
-    </thead>
-    <tbody>
-      <tr class="highlight-row"><td>Starting price</td><td>Free / $20/mo</td><td>$40/mo</td><td>$49/mo</td><td>$49/mo</td></tr>
-      <tr><td>Geographic rendering</td><td>4 continents</td><td>1 region</td><td>Proxy-based</td><td>Proxy-based</td></tr>
-      <tr><td>Screenshot + PDF + Scrape</td><td>All included</td><td>All included</td><td>Scrape only</td><td>Scrape-focused</td></tr>
-      <tr><td>Card + USDC payment</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
-      <tr><td>Batch processing</td><td>100 URLs</td><td>Varies</td><td>Yes</td><td>Yes</td></tr>
-      <tr><td>Performance metrics</td><td>Per-request</td><td>No</td><td>No</td><td>No</td></tr>
-    </tbody>
-  </table>
-</section>
+    function showKey(key) {
+      document.getElementById('key-text').textContent = key;
+      document.getElementById('key-display').style.display = 'block';
+      document.getElementById('key-warning').style.display = 'block';
+      document.getElementById('key-usage').style.display = 'block';
+      document.getElementById('gen-btn').textContent = 'Key generated';
+      document.getElementById('gen-btn').disabled = true;
+      document.getElementById('gen-btn').style.opacity = '0.5';
 
-<footer>
-  <p><a href="terms.html">Terms of Service</a> &middot; <a href="mailto:support@swarmbrowser.net">Contact</a></p>
-  <p style="margin-top:0.5rem">Headless browser API from 4 continents.</p>
-  <div style="margin-top:1rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;font-size:0.8rem;">
-    <span style="color:var(--muted)">Also from us:</span>
-    <a href="https://sertone.net" style="color:var(--muted)">Sertone</a>
-    <a href="https://l2aas.net" style="color:var(--muted)">L2aaS</a>
-    <a href="https://chainrpc.net" style="color:var(--muted)">ChainRPC</a>
-    <a href="https://chainclone.net" style="color:var(--muted)">ChainClone</a>
-    <a href="https://pingdog.net" style="color:var(--muted)">PingDog</a>
-    <a href="https://theloadtester.com" style="color:var(--muted)">LoadTester</a>
-  </div>
-  <p style="margin-top:0.5rem">&copy; 2026 SwarmBrowser</p>
-</footer>
+      var snippet = 'curl -X POST https://api.swarmbrowser.net/v1/screenshot \\\n' +
+        '  -H "Authorization: Bearer ' + key + '" \\\n' +
+        '  -d \'{"url":"https://example.com","region":"frankfurt","format":"png"}\' \\\n' +
+        '  --output screenshot.png';
+      document.getElementById('snippet-text').textContent = snippet;
 
-<script>
-  function showTab(name) {
-    document.querySelectorAll('.code-panel').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.code-tab').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    event.target.classList.add('active');
-  }
-</script>
+      sessionStorage.setItem('swarm_key', key);
+    }
 
+    function generateKey() {
+      var btn = document.getElementById('gen-btn');
+      btn.textContent = 'Generating...';
+      btn.disabled = true;
+
+      fetch(API_URL + '/api/generate-key', { method: 'POST' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.key) {
+            showKey(data.key);
+          } else {
+            throw new Error(data.error || 'Unknown error');
+          }
+        })
+        .catch(function(err) {
+          console.warn('API unavailable, generating key client-side:', err.message);
+          var chars = '0123456789abcdef';
+          var key = 'rpk_';
+          for (var i = 0; i < 32; i++) key += chars[Math.floor(Math.random() * 16)];
+          showKey(key);
+        });
+    }
+  </script>
 </body>
 </html>

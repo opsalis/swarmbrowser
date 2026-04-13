@@ -1,11 +1,5 @@
-name = "swarmbrowser-website"
+name = "swarmbrowser"
 compatibility_date = "2024-12-01"
-main = "index.html"
 
 [site]
 bucket = "."
-
-[env.production]
-routes = [
-  { pattern = "swarmbrowser.example.com", custom_domain = true }
-]

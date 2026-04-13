@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SwarmBrowser Documentation — Headless Browser API</title>
+  <meta name="description" content="SwarmBrowser documentation: screenshot, PDF, scrape, batch, geographic comparison, and diff endpoints. Curl, Node.js, Python examples.">
+  <link rel="canonical" href="https://swarmbrowser.net/docs.html">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://swarmbrowser.net/docs.html">
+  <meta property="og:title" content="SwarmBrowser Documentation">
+  <meta property="og:description" content="Full API reference for SwarmBrowser — screenshot, PDF, scrape, batch, compare, diff.">
+  <meta property="og:site_name" content="SwarmBrowser">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230891b2'/%3E%3Ccircle cx='8' cy='8' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='16' cy='8' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='24' cy='8' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='8' cy='16' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23fff'/%3E%3Ccircle cx='24' cy='16' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='8' cy='24' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='16' cy='24' r='2' fill='%23fff' opacity='.9'/%3E%3Ccircle cx='24' cy='24' r='2' fill='%23fff' opacity='.9'/%3E%3C/svg%3E">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "SwarmBrowser API Documentation",
+    "description": "How to use the SwarmBrowser headless browser API — screenshot, PDF, scrape, batch, compare, diff.",
+    "url": "https://swarmbrowser.net/docs.html",
+    "publisher": { "@type": "Organization", "name": "SwarmBrowser", "url": "https://swarmbrowser.net" }
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #0891b2;
+      --teal-dim: #0e7490;
+      --teal-light: #ecfeff;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --bg: #ffffff;
+      --bg-alt: #f8fafc;
+      --border: #e2e8f0;
+      --green: #10b981;
+      --radius: 10px;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    nav .inner { max-width: 820px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.5px; color: var(--text); text-decoration: none; }
+    .logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; gap: 24px; font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+    .nav-links a { color: var(--text-secondary); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .nav-links a.active { color: var(--text); }
+
+    h1 { font-size: 2.25rem; font-weight: 800; letter-spacing: -1px; margin: 48px 0 16px; }
+    h2 { font-size: 1.5rem; font-weight: 700; margin: 48px 0 16px; padding-top: 24px; border-top: 1px solid var(--border); }
+    h3 { font-size: 1.1rem; font-weight: 600; margin: 32px 0 12px; }
+    h4 { font-size: 0.95rem; font-weight: 600; margin: 24px 0 8px; color: var(--text-secondary); }
+    p { margin-bottom: 16px; color: var(--text-secondary); }
+    ul, ol { margin-bottom: 16px; padding-left: 24px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    code { background: var(--bg-alt); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; font-size: 0.85em; color: var(--text); }
+    pre { background: #0f172a; color: #e2e8f0; border-radius: 10px; padding: 20px 24px; overflow-x: auto; margin-bottom: 24px; font-size: 0.82rem; line-height: 1.6; position: relative; }
+    pre code { background: none; border: none; padding: 0; color: inherit; }
+    .comment { color: #64748b; }
+    .str { color: #86efac; }
+    .kw { color: #7dd3fc; }
+    .key { color: #f0abfc; }
+
+    .method-badge { display: inline-block; background: var(--teal); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; margin-right: 8px; }
+    .endpoint-path { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 600; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.88rem; }
+    th { text-align: left; padding: 10px 14px; background: var(--bg-alt); border: 1px solid var(--border); font-weight: 600; color: var(--text); }
+    td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; }
+    td code { font-size: 0.8rem; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: var(--radius); font-weight: 600; font-size: 0.9rem; cursor: pointer; border: none; background: var(--teal); color: #fff; }
+    .btn:hover { background: var(--teal-dim); text-decoration: none; }
+
+    .alert { padding: 14px 18px; border-radius: 8px; font-size: 0.9rem; margin-bottom: 20px; color: var(--text-secondary); }
+    .alert-info { background: #ecfeff; border: 1px solid #a5f3fc; }
+    .alert-warn { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+
+    .copy-btn { position: absolute; top: 10px; right: 12px; background: rgba(148,163,184,0.1); border: 1px solid #334155; color: #94a3b8; padding: 3px 10px; border-radius: 6px; font-size: 0.72rem; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .copy-btn:hover { background: rgba(148,163,184,0.2); color: #e2e8f0; }
+
+    .toc { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 10px; padding: 24px 28px; margin: 32px 0; }
+    .toc h3 { margin: 0 0 12px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); }
+    .toc ol { margin: 0; padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { color: var(--teal); font-size: 0.9rem; }
+
+    .rate-table-wrap { overflow-x: auto; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 0; margin-top: 64px; text-align: center; font-size: 0.8rem; color: #94a3b8; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="inner">
+      <a href="/" class="logo" style="text-decoration:none">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#0891b2"/>
+          <circle cx="8" cy="8" r="2" fill="white" opacity="0.9"/>
+          <circle cx="16" cy="8" r="2" fill="white" opacity="0.9"/>
+          <circle cx="24" cy="8" r="2" fill="white" opacity="0.9"/>
+          <circle cx="8" cy="16" r="2" fill="white" opacity="0.9"/>
+          <circle cx="16" cy="16" r="2.5" fill="white"/>
+          <circle cx="24" cy="16" r="2" fill="white" opacity="0.9"/>
+          <circle cx="8" cy="24" r="2" fill="white" opacity="0.9"/>
+          <circle cx="16" cy="24" r="2" fill="white" opacity="0.9"/>
+          <circle cx="24" cy="24" r="2" fill="white" opacity="0.9"/>
+        </svg>
+        <span>Swarm<span style="color:var(--teal)">Browser</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/docs.html" class="active">Docs</a>
+        <a href="/account.html">Account</a>
+        <a href="/terms.html">Terms</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Documentation</h1>
+    <p style="font-size:1.1rem;">Complete reference for the SwarmBrowser API. All endpoints return results within 30 seconds. Batch jobs are asynchronous.</p>
+
+    <div class="toc">
+      <h3>Contents</h3>
+      <ol>
+        <li><a href="#quickstart">Quick start</a></li>
+        <li><a href="#auth">Authentication</a></li>
+        <li><a href="#screenshot">POST /v1/screenshot</a></li>
+        <li><a href="#pdf">POST /v1/pdf</a></li>
+        <li><a href="#scrape">POST /v1/scrape</a></li>
+        <li><a href="#batch">POST /v1/batch + GET /v1/batch/:id</a></li>
+        <li><a href="#compare">POST /v1/compare</a></li>
+        <li><a href="#diff">POST /v1/diff</a></li>
+        <li><a href="#regions">Regions</a></li>
+        <li><a href="#rate-limits">Rate limits</a></li>
+        <li><a href="#errors">Error codes</a></li>
+        <li><a href="#webhooks">Webhooks</a></li>
+        <li><a href="#dapp">dApp rendering</a></li>
+        <li><a href="#examples">Code examples</a></li>
+      </ol>
+    </div>
+
+    <h2 id="quickstart">Quick start</h2>
+    <p>Get a free key on the <a href="/">home page</a>, then take your first screenshot:</p>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code><span class="comment"># Screenshot any URL and save it</span>
+curl -X POST https://api.swarmbrowser.net/v1/screenshot \
+  -H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \
+  -H <span class="str">"Content-Type: application/json"</span> \
+  -d <span class="str">'{"url":"https://example.com"}'</span> \
+  --output screenshot.png</code></pre>
+
+    <p>You'll get a PNG file back immediately. No setup, no SDK required.</p>
+
+    <h2 id="auth">Authentication</h2>
+    <p>Pass your key in the <code>Authorization</code> header or as a query parameter:</p>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code><span class="comment"># Header (preferred)</span>
+Authorization: Bearer rpk_YOUR_KEY
+
+<span class="comment"># Query param (for webhooks and testing)</span>
+https://api.swarmbrowser.net/v1/screenshot?key=rpk_YOUR_KEY</code></pre>
+
+    <p>Keys begin with <code>rpk_</code> followed by 32 hex characters. Generate one on the <a href="/">home page</a> — no account needed.</p>
+
+    <div class="alert alert-info">Keys are hashed before storage. SwarmBrowser never stores your raw key. If you lose it, generate a new one — your old key cannot be recovered.</div>
+
+    <h2 id="screenshot">POST /v1/screenshot</h2>
+    <p>Renders a URL with a real Chromium browser and returns the screenshot as binary PNG or JPEG.</p>
+
+    <h4>Request body</h4>
+    <div class="rate-table-wrap">
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>url</code></td><td>string</td><td><em>required</em></td><td>The URL to render. Must include protocol (https://).</td></tr>
+      <tr><td><code>width</code></td><td>integer</td><td>1280</td><td>Viewport width in pixels.</td></tr>
+      <tr><td><code>height</code></td><td>integer</td><td>720</td><td>Viewport height in pixels.</td></tr>
+      <tr><td><code>format</code></td><td>string</td><td>png</td><td><code>png</code> or <code>jpeg</code></td></tr>
+      <tr><td><code>quality</code></td><td>integer</td><td>85</td><td>JPEG quality 1–100. Ignored for PNG.</td></tr>
+      <tr><td><code>fullPage</code></td><td>boolean</td><td>false</td><td>Capture full scrollable page height.</td></tr>
+      <tr><td><code>region</code></td><td>string</td><td>montreal</td><td>Rendering node. See <a href="#regions">Regions</a>.</td></tr>
+      <tr><td><code>waitUntil</code></td><td>string</td><td>networkidle2</td><td><code>load</code>, <code>domcontentloaded</code>, <code>networkidle0</code>, <code>networkidle2</code></td></tr>
+      <tr><td><code>blockResources</code></td><td>string[]</td><td>[]</td><td>Resource types to block: <code>image</code>, <code>stylesheet</code>, <code>font</code>, <code>script</code></td></tr>
+      <tr><td><code>userAgent</code></td><td>string</td><td>Chromium default</td><td>Override the browser user agent string.</td></tr>
+      <tr><td><code>timeout</code></td><td>integer</td><td>30000</td><td>Navigation timeout in milliseconds.</td></tr>
+    </table>
+    </div>
+
+    <h4>Response</h4>
+    <p>Binary image with headers:</p>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>Content-Type: image/png
+X-Load-Time: 1243       <span class="comment"># ms to load the page</span>
+X-Location: frankfurt   <span class="comment"># region that rendered it</span>
+X-Resource-Count: 47    <span class="comment"># number of resources loaded</span></code></pre>
+
+    <h4>Example</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>curl -X POST https://api.swarmbrowser.net/v1/screenshot \
+  -H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \
+  -d <span class="str">'{"url":"https://news.ycombinator.com","width":1440,"height":900,"fullPage":true,"region":"singapore"}'</span> \
+  --output hn-singapore.png</code></pre>
+
+    <h2 id="pdf">POST /v1/pdf</h2>
+    <p>Renders a URL and returns a PDF. Useful for generating reports, invoices, and archiving pages.</p>
+
+    <h4>Request body</h4>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>url</code></td><td>string</td><td><em>required</em></td><td>URL to render.</td></tr>
+      <tr><td><code>format</code></td><td>string</td><td>A4</td><td>Paper size: <code>A4</code>, <code>A3</code>, <code>Letter</code>, <code>Legal</code>, <code>Tabloid</code></td></tr>
+      <tr><td><code>landscape</code></td><td>boolean</td><td>false</td><td>Landscape orientation.</td></tr>
+      <tr><td><code>printBackground</code></td><td>boolean</td><td>true</td><td>Include background colors and images.</td></tr>
+      <tr><td><code>margin</code></td><td>object</td><td>1cm all</td><td><code>{"top":"1cm","bottom":"1cm","left":"1cm","right":"1cm"}</code></td></tr>
+      <tr><td><code>region</code></td><td>string</td><td>montreal</td><td>Rendering node.</td></tr>
+      <tr><td><code>waitUntil</code></td><td>string</td><td>networkidle2</td><td>Navigation wait strategy.</td></tr>
+      <tr><td><code>timeout</code></td><td>integer</td><td>30000</td><td>Timeout in ms.</td></tr>
+    </table>
+
+    <h4>Response</h4>
+    <p><code>Content-Type: application/pdf</code> — binary PDF with <code>Content-Disposition: attachment; filename="page.pdf"</code>.</p>
+
+    <h4>Example</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>curl -X POST https://api.swarmbrowser.net/v1/pdf \
+  -H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \
+  -d <span class="str">'{"url":"https://example.com/invoice","format":"A4","landscape":false}'</span> \
+  --output invoice.pdf</code></pre>
+
+    <h2 id="scrape">POST /v1/scrape</h2>
+    <p>Renders a URL and extracts structured data. Works on JavaScript-heavy SPAs, React apps, and any dynamic page.</p>
+
+    <h4>Request body</h4>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>url</code></td><td>string</td><td><em>required</em></td><td>URL to render.</td></tr>
+      <tr><td><code>extract</code></td><td>string[]</td><td>["title","meta","text","headings"]</td><td>Built-in fields to extract. Options: <code>title</code>, <code>meta</code>, <code>links</code>, <code>text</code>, <code>html</code>, <code>headings</code>, <code>images</code></td></tr>
+      <tr><td><code>selectors</code></td><td>object</td><td>{}</td><td>CSS selectors. Key = field name, value = CSS selector string. Returns array if multiple matches.</td></tr>
+      <tr><td><code>waitFor</code></td><td>string</td><td>—</td><td>CSS selector to wait for before extracting.</td></tr>
+      <tr><td><code>region</code></td><td>string</td><td>montreal</td><td>Rendering node.</td></tr>
+      <tr><td><code>waitUntil</code></td><td>string</td><td>networkidle2</td><td>Navigation wait strategy.</td></tr>
+      <tr><td><code>timeout</code></td><td>integer</td><td>30000</td><td>Timeout in ms.</td></tr>
+    </table>
+
+    <h4>Response</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>{
+  <span class="key">"url"</span>: <span class="str">"https://example.com"</span>,
+  <span class="key">"location"</span>: <span class="str">"frankfurt"</span>,
+  <span class="key">"metrics"</span>: {
+    <span class="key">"loadTime"</span>: 1243,
+    <span class="key">"domContentLoaded"</span>: 890,
+    <span class="key">"firstPaint"</span>: 342,
+    <span class="key">"resourceCount"</span>: 47,
+    <span class="key">"totalBytes"</span>: 1284032
+  },
+  <span class="key">"content"</span>: {
+    <span class="key">"title"</span>: <span class="str">"Example Domain"</span>,
+    <span class="key">"meta"</span>: { <span class="key">"description"</span>: <span class="str">"..."</span> },
+    <span class="key">"headings"</span>: [{ <span class="key">"level"</span>: 1, <span class="key">"text"</span>: <span class="str">"Example Domain"</span> }],
+    <span class="key">"text"</span>: <span class="str">"Example Domain\nThis domain is for use..."</span>
+  },
+  <span class="key">"selectors"</span>: {
+    <span class="key">"price"</span>: <span class="str">"$29.99"</span>,
+    <span class="key">"stock"</span>: <span class="str">"In stock"</span>
+  }
+}</code></pre>
+
+    <h4>Example</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>curl -X POST https://api.swarmbrowser.net/v1/scrape \
+  -H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \
+  -d <span class="str">'{
+    "url": "https://store.example.com/product/123",
+    "extract": ["title", "meta"],
+    "selectors": {
+      "price": ".product-price",
+      "rating": ".star-rating",
+      "stock": "[data-availability]"
+    },
+    "waitFor": ".product-price"
+  }'</span></code></pre>
+
+    <h2 id="batch">POST /v1/batch &amp; GET /v1/batch/:id</h2>
+    <p>Submit up to 10,000 URLs in a single call. Jobs are queued and processed in parallel across the swarm. Poll for completion or receive a webhook.</p>
+
+    <h4>POST /v1/batch — Submit job</h4>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>urls</code></td><td>string[]</td><td><em>required</em></td><td>Array of URLs. Max 10,000 on Business, 1,000 on Pro.</td></tr>
+      <tr><td><code>action</code></td><td>string</td><td>scrape</td><td><code>screenshot</code>, <code>pdf</code>, or <code>scrape</code></td></tr>
+      <tr><td><code>options</code></td><td>object</td><td>{}</td><td>Same options as the single-URL endpoint for the chosen action.</td></tr>
+      <tr><td><code>webhook</code></td><td>string</td><td>—</td><td>URL to POST results to when complete.</td></tr>
+      <tr><td><code>region</code></td><td>string</td><td>montreal</td><td>Rendering region.</td></tr>
+    </table>
+
+    <h4>Response (submit)</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>{
+  <span class="key">"batchId"</span>: <span class="str">"bch_a1b2c3d4e5f6"</span>,
+  <span class="key">"total"</span>: 5000,
+  <span class="key">"estimatedSeconds"</span>: 180,
+  <span class="key">"pollUrl"</span>: <span class="str">"https://api.swarmbrowser.net/v1/batch/bch_a1b2c3d4e5f6"</span>
+}</code></pre>
+
+    <h4>GET /v1/batch/:id — Poll status</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>{
+  <span class="key">"batchId"</span>: <span class="str">"bch_a1b2c3d4e5f6"</span>,
+  <span class="key">"status"</span>: <span class="str">"processing"</span>,  <span class="comment">// "queued" | "processing" | "complete" | "failed"</span>
+  <span class="key">"total"</span>: 5000,
+  <span class="key">"completed"</span>: 2341,
+  <span class="key">"failed"</span>: 12,
+  <span class="key">"results"</span>: [ ... ]  <span class="comment">// populated when status = "complete"</span>
+}</code></pre>
+
+    <h2 id="compare">POST /v1/compare</h2>
+    <p>Renders the same URL from multiple regions simultaneously. Returns a screenshot and performance metrics per region. Ideal for spotting geo-blocks, CDN differences, and regional content changes.</p>
+
+    <h4>Request body</h4>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>url</code></td><td>string</td><td><em>required</em></td><td>URL to compare.</td></tr>
+      <tr><td><code>regions</code></td><td>string[]</td><td>all regions</td><td>Subset of regions to compare. Omit for all 8.</td></tr>
+      <tr><td><code>format</code></td><td>string</td><td>png</td><td>Screenshot format per region.</td></tr>
+      <tr><td><code>width</code></td><td>integer</td><td>1280</td><td>Viewport width.</td></tr>
+      <tr><td><code>height</code></td><td>integer</td><td>720</td><td>Viewport height.</td></tr>
+      <tr><td><code>waitUntil</code></td><td>string</td><td>networkidle2</td><td>Navigation wait strategy.</td></tr>
+    </table>
+
+    <h4>Response</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>{
+  <span class="key">"url"</span>: <span class="str">"https://example.com"</span>,
+  <span class="key">"regions"</span>: {
+    <span class="key">"montreal"</span>: {
+      <span class="key">"loadTime"</span>: 312,
+      <span class="key">"resourceCount"</span>: 47,
+      <span class="key">"screenshot"</span>: <span class="str">"base64..."</span>  <span class="comment">// base64 PNG</span>
+    },
+    <span class="key">"frankfurt"</span>: {
+      <span class="key">"loadTime"</span>: 287,
+      <span class="key">"resourceCount"</span>: 51,
+      <span class="key">"screenshot"</span>: <span class="str">"base64..."</span>
+    },
+    <span class="key">"singapore"</span>: {
+      <span class="key">"loadTime"</span>: 891,
+      <span class="key">"error"</span>: <span class="str">"Navigation timeout"</span>  <span class="comment">// per-region errors don't fail the call</span>
+    }
+  }
+}</code></pre>
+
+    <h4>Example</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>curl -X POST https://api.swarmbrowser.net/v1/compare \
+  -H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \
+  -d <span class="str">'{"url":"https://yoursite.com","regions":["montreal","frankfurt","singapore","sydney"]}'</span></code></pre>
+
+    <h2 id="diff">POST /v1/diff</h2>
+    <p>Like <code>/v1/compare</code> but also performs pixel-by-pixel comparison between regions and returns a diff image highlighting visual differences. Useful for detecting geo-blocked content, CDN staleness, and A/B test leaks.</p>
+
+    <h4>Request body</h4>
+    <p>Same as <code>/v1/compare</code>, plus:</p>
+    <table>
+      <tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>baseline</code></td><td>string</td><td>first region</td><td>Region to use as the baseline for comparison.</td></tr>
+      <tr><td><code>threshold</code></td><td>number</td><td>0.1</td><td>Pixel difference threshold (0–1). Lower = more sensitive.</td></tr>
+    </table>
+
+    <h4>Response</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>{
+  <span class="key">"url"</span>: <span class="str">"https://example.com"</span>,
+  <span class="key">"baseline"</span>: <span class="str">"montreal"</span>,
+  <span class="key">"regions"</span>: {
+    <span class="key">"frankfurt"</span>: {
+      <span class="key">"screenshot"</span>: <span class="str">"base64..."</span>,
+      <span class="key">"diff"</span>: <span class="str">"base64..."</span>,       <span class="comment">// highlighted diff image</span>
+      <span class="key">"diffPixels"</span>: 1284,          <span class="comment">// number of different pixels</span>
+      <span class="key">"diffPercent"</span>: 0.83,          <span class="comment">// percentage of screen changed</span>
+      <span class="key">"loadTime"</span>: 287
+    }
+  }
+}</code></pre>
+
+    <h2 id="regions">Regions</h2>
+    <p>Use the <code>region</code> parameter to select where rendering happens. For <code>/v1/compare</code> and <code>/v1/diff</code>, pass an array to <code>regions</code>.</p>
+    <table>
+      <tr><th>ID</th><th>Location</th><th>Continent</th></tr>
+      <tr><td><code>montreal</code></td><td>Montreal, Canada</td><td>North America</td></tr>
+      <tr><td><code>frankfurt</code></td><td>Frankfurt, Germany</td><td>Europe</td></tr>
+      <tr><td><code>london</code></td><td>London, UK</td><td>Europe</td></tr>
+      <tr><td><code>warsaw</code></td><td>Warsaw, Poland</td><td>Europe</td></tr>
+      <tr><td><code>singapore</code></td><td>Singapore</td><td>Southeast Asia</td></tr>
+      <tr><td><code>jakarta</code></td><td>Jakarta, Indonesia</td><td>Southeast Asia</td></tr>
+      <tr><td><code>kualalumpur</code></td><td>Kuala Lumpur, Malaysia</td><td>Southeast Asia</td></tr>
+      <tr><td><code>sydney</code></td><td>Sydney, Australia</td><td>Oceania</td></tr>
+    </table>
+    <div class="alert alert-info">Free tier: only <code>montreal</code> is available. All regions are available on Pro and Business.</div>
+
+    <h2 id="rate-limits">Rate limits</h2>
+    <div class="rate-table-wrap">
+    <table>
+      <tr><th>Tier</th><th>Pages/day</th><th>Concurrent</th><th>Batch max</th><th>Regions</th></tr>
+      <tr><td>Free</td><td>100</td><td>1</td><td>—</td><td>montreal only</td></tr>
+      <tr><td>Pro</td><td>10,000</td><td>10</td><td>1,000 URLs</td><td>All 8</td></tr>
+      <tr><td>Business</td><td>100,000</td><td>50</td><td>10,000 URLs</td><td>All 8</td></tr>
+    </table>
+    </div>
+    <p>Overflow (Pro and Business): $0.50 per 1,000 extra pages. You are never blocked — you pay for what you use. Overflow is pulled automatically from your approved allowance.</p>
+
+    <h4>Rate limit response headers</h4>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>X-RateLimit-Limit: 10000
+X-RateLimit-Remaining: 9873
+X-RateLimit-Reset: 1713600000</code></pre>
+
+    <h2 id="errors">Error codes</h2>
+    <table>
+      <tr><th>HTTP code</th><th>Error</th><th>Meaning</th></tr>
+      <tr><td>400</td><td>missing_url</td><td><code>url</code> field is required.</td></tr>
+      <tr><td>401</td><td>invalid_key</td><td>Key not found or malformed.</td></tr>
+      <tr><td>429</td><td>rate_limit</td><td>Daily page limit reached. Upgrade or wait until midnight UTC.</td></tr>
+      <tr><td>500</td><td>render_failed</td><td>Browser error. Usually a bad URL or timeout. Check the <code>error</code> field.</td></tr>
+      <tr><td>504</td><td>timeout</td><td>Page took longer than <code>timeout</code> ms to load.</td></tr>
+    </table>
+
+    <h2 id="webhooks">Webhooks</h2>
+    <p>For batch jobs, pass a <code>webhook</code> URL. We'll POST to it with <code>Content-Type: application/json</code> when the job is complete. The payload is identical to the poll response.</p>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>curl -X POST https://api.swarmbrowser.net/v1/batch \
+  -H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \
+  -d <span class="str">'{
+    "urls": ["https://a.com", "https://b.com"],
+    "action": "screenshot",
+    "webhook": "https://yourserver.com/webhooks/swarm"
+  }'</span></code></pre>
+
+    <p>We retry the webhook 3 times with exponential backoff if your server returns a non-2xx response.</p>
+
+    <h2 id="dapp">dApp rendering</h2>
+    <p>Capture Web3 pages and DeFi dashboards with injected wallet state. Pass <code>injectWallet</code> to inject a fake Ethereum provider with a configurable address and balance.</p>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code>curl -X POST https://api.swarmbrowser.net/v1/screenshot \
+  -H <span class="str">"Authorization: Bearer rpk_YOUR_KEY"</span> \
+  -d <span class="str">'{
+    "url": "https://app.uniswap.org",
+    "injectWallet": {
+      "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+      "balance": "10.5",
+      "chainId": 1
+    },
+    "waitFor": ".token-amount-input",
+    "fullPage": false
+  }'</span></code></pre>
+
+    <p>This injects <code>window.ethereum</code> with the specified wallet state before page load, so the dApp renders as if a wallet is connected.</p>
+
+    <h2 id="examples">Code examples</h2>
+
+    <h3>Node.js</h3>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code><span class="kw">const</span> fs = require(<span class="str">'fs'</span>);
+
+<span class="kw">async function</span> screenshot(url, region = <span class="str">'frankfurt'</span>) {
+  <span class="kw">const</span> res = <span class="kw">await</span> fetch(<span class="str">'https://api.swarmbrowser.net/v1/screenshot'</span>, {
+    method: <span class="str">'POST'</span>,
+    headers: {
+      <span class="str">'Authorization'</span>: <span class="str">`Bearer ${process.env.SWARM_KEY}`</span>,
+      <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>,
+    },
+    body: JSON.stringify({ url, region, fullPage: <span class="kw">true</span> }),
+  });
+  <span class="kw">if</span> (!res.ok) <span class="kw">throw new</span> Error(<span class="kw">await</span> res.text());
+  <span class="kw">const</span> buf = Buffer.from(<span class="kw">await</span> res.arrayBuffer());
+  fs.writeFileSync(<span class="str">'out.png'</span>, buf);
+  console.log(<span class="str">`Load time: ${res.headers.get('x-load-time')}ms`</span>);
+}
+
+screenshot(<span class="str">'https://example.com'</span>);</code></pre>
+
+    <h3>Python</h3>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code><span class="kw">import</span> requests, os
+
+<span class="kw">def</span> screenshot(url, region=<span class="str">'frankfurt'</span>):
+    r = requests.post(
+        <span class="str">'https://api.swarmbrowser.net/v1/screenshot'</span>,
+        headers={<span class="str">'Authorization'</span>: <span class="str">f'Bearer {os.environ["SWARM_KEY"]}'</span>},
+        json={<span class="str">'url'</span>: url, <span class="str">'region'</span>: region, <span class="str">'fullPage'</span>: <span class="kw">True</span>},
+        timeout=60
+    )
+    r.raise_for_status()
+    <span class="kw">with</span> open(<span class="str">'out.png'</span>, <span class="str">'wb'</span>) <span class="kw">as</span> f:
+        f.write(r.content)
+    print(<span class="str">f"Load time: {r.headers['x-load-time']}ms"</span>)
+
+screenshot(<span class="str">'https://example.com'</span>)</code></pre>
+
+    <h3>Geographic comparison (Node.js)</h3>
+    <pre><button class="copy-btn" onclick="copyPre(this)">Copy</button><code><span class="kw">const</span> res = <span class="kw">await</span> fetch(<span class="str">'https://api.swarmbrowser.net/v1/compare'</span>, {
+  method: <span class="str">'POST'</span>,
+  headers: {
+    <span class="str">'Authorization'</span>: <span class="str">`Bearer ${process.env.SWARM_KEY}`</span>,
+    <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span>,
+  },
+  body: JSON.stringify({
+    url: <span class="str">'https://yoursite.com'</span>,
+    regions: [<span class="str">'montreal'</span>, <span class="str">'frankfurt'</span>, <span class="str">'singapore'</span>, <span class="str">'sydney'</span>],
+  }),
+});
+
+<span class="kw">const</span> data = <span class="kw">await</span> res.json();
+<span class="kw">for</span> (<span class="kw">const</span> [region, result] of Object.entries(data.regions)) {
+  <span class="kw">if</span> (result.error) {
+    console.log(<span class="str">`${region}: ERROR — ${result.error}`</span>);
+  } <span class="kw">else</span> {
+    console.log(<span class="str">`${region}: ${result.loadTime}ms, ${result.resourceCount} resources`</span>);
+  }
+}</code></pre>
+
+  </div>
+
+  <footer>
+    &copy; 2026 SwarmBrowser &middot; <a href="/terms.html" style="color:#94a3b8">Terms of Service</a>
+  </footer>
+
+  <script>
+    function copyPre(btn) {
+      var pre = btn.parentElement;
+      var text = pre.innerText.replace(/^Copy\n?/, '');
+      navigator.clipboard.writeText(text.trim());
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+    }
+  </script>
+</body>
+</html>
