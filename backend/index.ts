@@ -129,7 +129,7 @@ app.post('/api/generate-key', (_req: Request, res: Response) => {
 
 // ── Account info ─────────────────────────────────────────────────────────────
 app.get('/api/account/:keyHash', (req: Request, res: Response) => {
-  const rec = getRecord(req.params.keyHash);
+  const rec = getRecord(req.params.keyHash as string);
   const limit = dailyLimit(rec.tier);
   const tierName = rec.tier === 2 ? 'Business' : rec.tier === 1 ? 'Pro' : 'Free';
 
@@ -413,7 +413,7 @@ async function processBatch(
 }
 
 app.get('/v1/batch/:id', authenticate, (req: Request, res: Response) => {
-  const job = batchJobs.get(req.params.id);
+  const job = batchJobs.get(req.params.id as string);
   if (!job) { res.status(404).json({ error: 'not_found', message: 'Batch job not found.' }); return; }
   res.json(job);
 });
