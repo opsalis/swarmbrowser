@@ -1,0 +1,18 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: swarmbrowser-api
+  namespace: swarmbrowser
+  annotations:
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "true"
+    external-dns.alpha.kubernetes.io/hostname: api.swarmbrowser.net
+spec:
+  entryPoints:
+  - web
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`api.swarmbrowser.net`)
+    services:
+    - name: swarmbrowser-api
+      port: 3500

@@ -1,23 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: swarmbrowser
+  name: swarmbrowser-api
   namespace: swarmbrowser
   labels:
-    app: swarmbrowser
+    app: swarmbrowser-api
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: swarmbrowser
+      app: swarmbrowser-api
   template:
     metadata:
       labels:
-        app: swarmbrowser
+        app: swarmbrowser-api
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: swarmbrowser-api
+              topologyKey: kubernetes.io/hostname
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
       containers:
-      - name: browser
-        image: opsalis/swarmbrowser:latest
+      - name: api
+        image: sertonenet/swarmbrowser-api:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3500
           name: http
@@ -25,55 +40,51 @@ spec:
         - name: PORT
           value: "3500"
         - name: POOL_SIZE
-          value: "5"
+          value: "3"
         - name: PAGE_TIMEOUT
           value: "30000"
+        - name: MAX_USES
+          value: "100"
         - name: NODE_LOCATION
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
-        - name: API_KEY
+        - name: OPS_CHAIN_RPC
+          value: "https://demo.chainrpc.net"
+        - name: OPS_CHAIN_ID
+          value: "845312"
+        - name: USDC_ADDRESS
+          value: "0xb081d16D40e4e4c27D6d8564d145Ab2933037111"
+        - name: SWARMPLAN_ADDRESS
           valueFrom:
-            secretKeyRef:
-              name: swarmbrowser-secrets
-              key: api-key
+            configMapKeyRef:
+              name: swarmbrowser-config
+              key: swarmplan-address
               optional: true
+        volumeMounts:
+        - name: dshm
+          mountPath: /dev/shm
         resources:
           requests:
             cpu: 500m
-            memory: 1Gi
+            memory: 1536Mi
           limits:
             cpu: 2000m
-            memory: 2Gi
+            memory: 3072Mi
         livenessProbe:
           httpGet:
             path: /health
             port: 3500
-          initialDelaySeconds: 15
+          initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /health
             port: 3500
-          initialDelaySeconds: 10
+          initialDelaySeconds: 30
           periodSeconds: 10
-      # Use shared memory for Chrome
-      volumes:
-      - name: dshm
-        emptyDir:
-          medium: Memory
-          sizeLimit: 512Mi
   strategy:
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 0
----
-# Spread pods across nodes for geographic distribution
-apiVersion: scheduling.k8s.io/v1
-kind: PriorityClass
-metadata:
-  name: swarmbrowser-priority
-value: 100
-globalDefault: false
-description: "Priority for SwarmBrowser pods"

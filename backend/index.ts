@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { browserPool } from './pool';
 import { navigatePage, cleanupPage, NavigationOptions } from './browser';
 import { extractContent, extractSelectors } from './scraper';
+import { startIndexer } from './indexer';
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
@@ -127,6 +128,18 @@ app.post('/api/generate-key', (_req: Request, res: Response) => {
   res.json({ key, keyHash: '0x' + keyHash });
 });
 
+// ── Billing config (public, so the website can load the current SwarmPlan address) ─
+app.get('/api/billing-config', (_req: Request, res: Response) => {
+  res.json({
+    swarmplanAddress: process.env.SWARMPLAN_ADDRESS || '',
+    usdc: process.env.USDC_ADDRESS || '0xb081d16D40e4e4c27D6d8564d145Ab2933037111',
+    chainId: parseInt(process.env.OPS_CHAIN_ID || '845312'),
+    rpc: process.env.OPS_CHAIN_RPC || 'https://demo.chainrpc.net',
+    proPriceUsdc: 20,
+    businessPriceUsdc: 100,
+  });
+});
+
 // ── Account info ─────────────────────────────────────────────────────────────
 app.get('/api/account/:keyHash', (req: Request, res: Response) => {
   const rec = getRecord(req.params.keyHash as string);
@@ -174,10 +187,10 @@ app.post('/v1/screenshot', authenticate, rateLimit(1), async (req: Request, res:
       timeout: timeout || PAGE_TIMEOUT
     });
 
-    const screenshotOptions: any = { type: format === 'jpeg' ? 'jpeg' : 'png', fullPage, encoding: 'binary' };
+    const screenshotOptions: any = { type: format === 'jpeg' ? 'jpeg' : 'png', fullPage };
     if (format === 'jpeg' && quality) screenshotOptions.quality = quality;
 
-    const screenshot = await page.screenshot(screenshotOptions);
+    const screenshot = Buffer.from(await page.screenshot(screenshotOptions));
     await cleanupPage(page);
 
     res.set('Content-Type', format === 'jpeg' ? 'image/jpeg' : 'image/png');
@@ -207,12 +220,12 @@ app.post('/v1/pdf', authenticate, rateLimit(1), async (req: Request, res: Respon
     const page = await instance.browser.newPage();
     const metrics = await navigatePage(page, { url, waitUntil, blockResources, userAgent, timeout: timeout || PAGE_TIMEOUT });
 
-    const pdf = await page.pdf({
+    const pdf = Buffer.from(await page.pdf({
       format: format || 'A4',
       landscape,
       printBackground,
       margin: margin || { top: '1cm', bottom: '1cm', left: '1cm', right: '1cm' }
-    });
+    }));
     await cleanupPage(page);
 
     res.set('Content-Type', 'application/pdf');
@@ -552,6 +565,13 @@ app.use((_req: Request, res: Response) => {
 // ── Start ────────────────────────────────────────────────────────────────────
 async function start() {
   await browserPool.initialize();
+  // Start the on-chain billing indexer (no-op unless SWARMPLAN_ADDRESS is set)
+  startIndexer((keyHash, tier, expiresAt) => {
+    const normalized = keyHash.startsWith('0x') ? keyHash.slice(2) : keyHash;
+    const rec = getRecord(normalized);
+    rec.tier = tier;
+    (rec as any).expiresAt = expiresAt;
+  });
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`SwarmBrowser API v2.0.0 listening on :${PORT}, location: ${NODE_LOCATION}`);
   });

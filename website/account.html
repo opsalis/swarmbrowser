@@ -319,10 +319,11 @@
 
   <script>
   var API_URL       = 'https://api.swarmbrowser.net';
-  var CHAIN_ID      = 845302;
-  var CHAIN_NAME    = 'Sertone Demo L2';
-  var BILLING_CONTRACT = '0xb990E79dDa9A645cAB782772C1b68967F10A7373'; // SwarmBrowser Billing on Demo L2 (845302)
-  var MOCK_USDC     = '0x75E9b48F4a8f8E10f6d46a7D582aC2bEc85B7d81';
+  var CHAIN_ID      = 845312;
+  var CHAIN_NAME    = 'Opsalis Demo L2';
+  // SwarmPlan billing contract (populated at deploy time — see /api/billing-config)
+  var BILLING_CONTRACT = window.__SWARMPLAN_ADDRESS || '';
+  var MOCK_USDC     = '0xb081d16D40e4e4c27D6d8564d145Ab2933037111';
 
   var selectedTier  = 1; // 1=Pro, 2=Business
   var currentKey    = '';
@@ -332,11 +333,17 @@
   var signer        = null;
   var subscription  = null;
 
+  // Fetch live billing config from the API so this page always targets the current deployment
+  fetch(API_URL + '/api/billing-config').then(function(r){ return r.json(); }).then(function(c){
+    if (c && c.swarmplanAddress) BILLING_CONTRACT = c.swarmplanAddress;
+    if (c && c.usdc) MOCK_USDC = c.usdc;
+    if (c && c.chainId) CHAIN_ID = c.chainId;
+  }).catch(function(){});
+
   var BILLING_ABI = [
-    'function subscribe(bytes32 keyHash, address token, uint8 tier) external',
-    'function getSubscription(bytes32 keyHash) external view returns (address wallet, address token, uint8 tier, uint256 subscribedAt, bool active)',
-    'function getAllowance(bytes32 keyHash) external view returns (uint256)',
-    'function isKeyRegistered(bytes32 keyHash) external view returns (bool)',
+    'function purchase(bytes32 keyHash, uint8 tier) external',
+    'function PRO_PRICE() view returns (uint256)',
+    'function BUSINESS_PRICE() view returns (uint256)',
   ];
 
   var ERC20_ABI = [
@@ -546,27 +553,27 @@
       await connectWallet();
       setAlert('Wallet connected: ' + walletAddress.slice(0,6) + '...' + walletAddress.slice(-4), 'success');
 
+      if (!BILLING_CONTRACT) throw new Error('Billing contract not deployed yet. Try again in a moment.');
       var tokenAddr = MOCK_USDC;
-      // Pro=$19.37, Business=$97.53 — 12x as initial allowance
-      var tierAmount = selectedTier === 1 ? 19370000n : 97530000n;
-      var approveAmount = tierAmount * 120n;
+      // Pro = $20/mo = 20_000_000; Business = $100/mo = 100_000_000 (USDC 6-decimals)
+      var price = selectedTier === 1 ? 20_000_000n : 100_000_000n;
 
       btn.innerHTML = '<span class="spinner"></span> Step 1/2: Approve USDC...';
       setAlert('Approving USDC. Confirm in your wallet.', 'info');
 
       var tokenContract = new ethers.Contract(tokenAddr, ERC20_ABI, signer);
-      var approveTx = await tokenContract.approve(BILLING_CONTRACT, approveAmount);
+      var approveTx = await tokenContract.approve(BILLING_CONTRACT, price);
       setAlert('Approval submitted. Waiting...', 'info');
       await approveTx.wait();
-      setAlert('USDC approved. Subscribing...', 'success');
+      setAlert('USDC approved. Purchasing plan...', 'success');
 
-      btn.innerHTML = '<span class="spinner"></span> Step 2/2: Subscribing...';
+      btn.innerHTML = '<span class="spinner"></span> Step 2/2: Purchasing plan...';
       var billingContract = new ethers.Contract(BILLING_CONTRACT, BILLING_ABI, signer);
-      var subscribeTx = await billingContract.subscribe(currentHash, tokenAddr, selectedTier);
-      setAlert('Subscription submitted. Waiting...', 'info');
-      await subscribeTx.wait();
+      var purchaseTx = await billingContract.purchase(currentHash, selectedTier);
+      setAlert('Purchase submitted. Waiting for confirmation...', 'info');
+      await purchaseTx.wait();
 
-      setAlert('Subscription active!', 'success');
+      setAlert('Plan active! Your key has been upgraded. It may take ~15 seconds to reflect.', 'success');
       closeModal('subscribe-modal');
       setTimeout(function() { fetchAccountData(); }, 2000);
     } catch (e) {

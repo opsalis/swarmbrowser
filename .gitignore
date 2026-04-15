@@ -1,8 +1,4 @@
+.wrangler/
 node_modules/
-dist/
-*.env
-.env.*
-*.log
-.DS_Store
-*.db
-data/
+backend/dist/
+backend/node_modules/

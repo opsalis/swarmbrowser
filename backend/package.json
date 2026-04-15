@@ -9,6 +9,7 @@
     "dev": "tsx watch index.ts"
   },
   "dependencies": {
+    "ethers": "^6.13.4",
     "express": "^4.21.0",
     "puppeteer-core": "^23.10.0",
     "uuid": "^10.0.0"
